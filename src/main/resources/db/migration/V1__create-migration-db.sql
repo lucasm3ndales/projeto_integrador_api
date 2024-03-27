@@ -123,11 +123,13 @@ CREATE TABLE tramite
     id BIGSERIAL PRIMARY KEY,
     data_tempo TIMESTAMP NOT NULL,
     status VARCHAR(63) NOT NULL,
-    origem VARCHAR(125) NOT NULL,
-    destino VARCHAR(125) NOT NULL,
+    fk_origem BIGINT NOT NULL,
+    fk_destino BIGINT NOT NULL,
     fk_evento BIGINT NOT NULL,
 
-    FOREIGN KEY (fk_evento) REFERENCES evento(id)
+    FOREIGN KEY (fk_evento) REFERENCES evento(id),
+    FOREIGN KEY (fk_origem) REFERENCES usuario(id),
+    FOREIGN KEY (fk_destino) REFERENCES usuario(id)
 );
 
 CREATE TABLE despesa

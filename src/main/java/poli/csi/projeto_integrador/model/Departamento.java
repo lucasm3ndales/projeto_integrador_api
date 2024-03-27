@@ -26,6 +26,7 @@ public class Departamento extends Usuario {
     @JsonIgnore
     private BigDecimal gasto;
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+    @JoinTable(name = "documento_departamento")
     @JsonBackReference
     private Set<Repasse> repasses;
     @OneToMany(cascade = CascadeType.ALL)

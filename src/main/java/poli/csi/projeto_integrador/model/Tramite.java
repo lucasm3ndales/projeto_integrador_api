@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tramite")
@@ -22,13 +23,29 @@ public class Tramite {
     @Column(name = "status", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private StatusTramite status;
-    @Column(name = "origem", length = 125, nullable = false)
-    private String origem;
-    @Column(name = "destino", length = 125, nullable = false)
-    private String destino;
+    @ManyToOne
+    @JoinColumn(name = "fk_origem", nullable = false)
+    private Usuario origem;
+    @ManyToOne
+    @JoinColumn(name = "fk_destino", nullable = false)
+    private Usuario destino;
     @ManyToOne
     @JoinColumn(name = "fk_evento")
     private Evento evento;
 
     public enum StatusTramite {EM_TRAMITE, ENCERRADO}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tramite tramite = (Tramite) o;
+        return Objects.equals(id, tramite.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

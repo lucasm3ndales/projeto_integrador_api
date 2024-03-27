@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -52,10 +53,12 @@ public class Evento {
     @Embedded
     private Endereco endereco;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    @JoinTable(name = "documento_evento")
     private Set<DocEvento> documentos;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private Set<Tramite> tramites;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    @JoinTable(name = "despesa_evento")
     private Set<DespesaEvento> despesaEventos;
 
     public enum TipoEvento {OUTROS}
@@ -63,4 +66,18 @@ public class Evento {
     public enum StatusEvento {ACEITO, RECUSADO, PENDENTE}
 
     public enum Periodicidade {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Evento evento = (Evento) o;
+        return Objects.equals(id, evento.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

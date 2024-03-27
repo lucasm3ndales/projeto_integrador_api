@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "repasse")
@@ -31,4 +32,18 @@ public class Repasse {
     @JoinColumn(name = "fk_departamento")
     @JsonManagedReference
     private Departamento departamento;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Repasse repasse = (Repasse) o;
+        return Objects.equals(id, repasse.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

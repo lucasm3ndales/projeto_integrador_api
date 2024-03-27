@@ -14,5 +14,6 @@ public class Servidor extends Usuario {
     @Column(name = "matricula", length = 7, unique = true, nullable = false)
     private String matricula;
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "documento_servidor")
     private Set<DocServidor> documentos;
 }

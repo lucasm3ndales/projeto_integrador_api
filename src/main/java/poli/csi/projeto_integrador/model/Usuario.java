@@ -2,11 +2,21 @@ package poli.csi.projeto_integrador.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +38,9 @@ public abstract class Usuario {
     @Column(name = "senha", nullable = false)
     @JsonIgnore
     private String senha;
+    @OneToMany
+    @JoinTable
+    private Set<Tramite> tramites;
 
     public enum TipoUsuario {REITORIA, DEPARTAMENTO, SERVIDOR}
 

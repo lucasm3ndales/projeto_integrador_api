@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,7 +38,6 @@ public abstract class Usuario {
     @JsonIgnore
     private String senha;
     @OneToMany
-    @JoinTable
     private Set<Tramite> tramites;
 
     public enum TipoUsuario {REITORIA, DEPARTAMENTO, SERVIDOR}

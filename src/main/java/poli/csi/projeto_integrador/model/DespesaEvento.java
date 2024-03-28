@@ -11,30 +11,25 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "despesa_evento")
-@IdClass(DespesaEventoKey.class)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DespesaEvento {
     @Id
-    @Column(name = "fk_despesa", nullable = false)
-    private Long idDespesa;
+    @ManyToOne
+    @JoinColumn(name = "fk_evento", nullable = false)
+    private Evento evento;
     @Id
-    @Column(name = "fk_evento", nullable = false)
-    private Long idEvento;
+    @ManyToOne
+    @JoinColumn(name = "fk_despesa", nullable = false)
+    private Despesa despesa;
     @Column(name = "valor", precision = 12, scale = 2, nullable = false)
     private BigDecimal valor;
     @Column(name = "data_tempo", nullable = false)
     private Timestamp dataTempo;
     @Column(name = "justificativa", length = 500, nullable = false, columnDefinition = "TEXT")
     private String justificativa;
-    @ManyToOne
-    @JoinColumn(name = "fk_evento", nullable = false)
-    private Evento evento;
-    @ManyToOne
-    @JoinColumn(name = "fk_despesa", nullable = false)
-    private Despesa despesa;
 
     @Override
     public boolean equals(Object o) {
@@ -42,12 +37,12 @@ public class DespesaEvento {
         if (o == null || getClass() != o.getClass()) return false;
 
         DespesaEvento de = (DespesaEvento) o;
-        return Objects.equals(idDespesa, de.idDespesa);
+        return Objects.equals(evento.getId(), de.evento.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idDespesa);
+        return Objects.hash(evento.getId());
     }
 
 }

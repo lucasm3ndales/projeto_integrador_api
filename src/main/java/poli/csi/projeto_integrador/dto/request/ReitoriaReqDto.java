@@ -33,10 +33,6 @@ public record ReitoriaReqDto(
                 String telefone,
                 @NotNull
                 @NotBlank
-                @CNPJ
-                String cnpj,
-                @NotNull
-                @NotBlank
                 @Size(min = 2)
                 String responsavel,
                 @NotNull
@@ -49,7 +45,7 @@ public record ReitoriaReqDto(
                 String senha
         ) {
 
-                this(null, name, email, telefone, cnpj, responsavel, login, senha);
+                this(null, name, email, telefone, null, responsavel, login, senha);
 
                 if (senha.equals(login)) {
                         throw new CustomException("Senha igual ao nome de usuário!");

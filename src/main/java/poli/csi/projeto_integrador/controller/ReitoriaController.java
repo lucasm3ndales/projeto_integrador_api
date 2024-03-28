@@ -15,20 +15,21 @@ public class ReitoriaController {
     private final ReitoriaService reitoriaService;
 
     @PostMapping("/salvar")
-    public ResponseEntity<String> salvarReitoria() {
-
+    public ResponseEntity<String> salvarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
+        boolean res = reitoriaService.salvarReitoria(dto);
+        if(res) {
+            return ResponseEntity.ok("Reitoria salva com sucesso!");
+        }
+        return ResponseEntity.internalServerError().body("Erro ao alterar dados da reitoria!");
     }
 
     @PutMapping("/alterar")
     public ResponseEntity<?> alterarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
-        if(id != null) {
             boolean res = reitoriaService.alterarReitoria(dto);
             if(res) {
                 return ResponseEntity.ok("Dados da reitoria alterados com sucesso!");
             }
             return ResponseEntity.internalServerError().body("Erro ao alterar dados da reitoria!");
-        }
-        return ResponseEntity.badRequest().body("Id da reitoria nulo!");
     }
 
     @PutMapping("/alterar/status/{id}")
@@ -57,7 +58,11 @@ public class ReitoriaController {
 
     @GetMapping("/reitorias")
     public ResponseEntity<List<Reitoria>> buscarReitorias() {
-        
+        List<Reitoria> reitorias = reitoriaService.buscarReitorias();
+        if(reitorias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reitorias);
     }
 
 

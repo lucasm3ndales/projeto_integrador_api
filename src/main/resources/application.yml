@@ -43,4 +43,8 @@ spring:
       enabled: false
 
 # JWT Secret Key:
-token.key: MTIzNA==
+token.key: MTIzNA==]
+
+logging:
+  level:
+    web: debug

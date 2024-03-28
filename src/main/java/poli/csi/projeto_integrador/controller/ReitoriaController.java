@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poli.csi.projeto_integrador.dto.request.ReitoriaReqDto;
+import poli.csi.projeto_integrador.dto.request.VerbaReqDto;
+import poli.csi.projeto_integrador.dto.response.VerbaResDto;
 import poli.csi.projeto_integrador.model.Reitoria;
 import poli.csi.projeto_integrador.service.ReitoriaService;
 import java.util.List;
@@ -24,7 +26,7 @@ public class ReitoriaController {
     }
 
     @PutMapping("/alterar")
-    public ResponseEntity<?> alterarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
+    public ResponseEntity<String> alterarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
             boolean res = reitoriaService.alterarReitoria(dto);
             if(res) {
                 return ResponseEntity.ok("Dados da reitoria alterados com sucesso!");
@@ -65,5 +67,25 @@ public class ReitoriaController {
         return ResponseEntity.ok(reitorias);
     }
 
+    @PostMapping("/verba-reitoria/adicionar")
+    public ResponseEntity<String>  adicionarVerbaReitoria(@Valid @RequestBody VerbaReqDto dto, @RequestHeader("timezone") String timezone) {
+            boolean res = reitoriaService.adicionarVerba(dto, timezone);
+            if(res) {
+                return ResponseEntity.ok("Verba adicionada com sucesso!");
+            }
+            return ResponseEntity.internalServerError().body("Erro ao adicionar verba a reitoria!");
+    }
+
+    @GetMapping("/verba-reitoria/{id}")
+    public ResponseEntity<?>  buscarVerbaReitoria(@PathVariable("id") Long id) {
+        if(id != null) {
+            VerbaResDto res = reitoriaService.buscarVerbaReitoria(id);
+            if(res != null) {
+                return ResponseEntity.ok(res);
+            }
+            return ResponseEntity.internalServerError().body("Erro ao buscar dados financeiros!");
+        }
+        return ResponseEntity.badRequest().body("Id da reitoria nulo!");
+    }
 
 }

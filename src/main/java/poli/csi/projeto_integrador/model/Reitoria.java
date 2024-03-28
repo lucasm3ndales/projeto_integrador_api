@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,5 +30,8 @@ public class Reitoria extends Usuario{
     private BigDecimal gasto;
     @OneToMany(mappedBy = "reitoria", cascade = CascadeType.ALL)
     @JsonBackReference
-    private Set<Repasse> repasses;
+    private Set<RepasseReitoria> repassesReitoria = new HashSet<>();
+    @OneToMany(mappedBy = "reitoria", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<RepasseDepartamento> repassesDepartamento = new HashSet<>();
 }

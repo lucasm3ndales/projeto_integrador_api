@@ -11,13 +11,13 @@ import poli.csi.projeto_integrador.dto.response.AuthResDto;
 import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.service.AuthService;
 
-@RestController(value = "/auth")
+@RestController
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
 
     //Pode retornar ou um "Usuário" ou uma mensagem adequada com uma custom exception
-    @PostMapping
+    @PostMapping("/auth")
     public ResponseEntity<?> auth(@Valid @RequestBody AuthReqDto req) {
         AuthResDto res = authService.authUsuario(req);
         if(res != null) {

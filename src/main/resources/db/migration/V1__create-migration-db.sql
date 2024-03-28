@@ -40,7 +40,17 @@ CREATE TABLE servidor
     FOREIGN KEY (id) REFERENCES usuario(id)
 );
 
-CREATE TABLE repasse
+CREATE TABLE repasse_reitoria
+(
+    id BIGSERIAL PRIMARY KEY,
+    data_tempo TIMESTAMP NOT NULL,
+    valor DECIMAL(14, 2) NOT NULL,
+    fk_reitoria BIGINT NOT NULL,
+
+    FOREIGN KEY (fk_reitoria) REFERENCES reitoria(id)
+);
+
+CREATE TABLE repasse_departamento
 (
     id BIGSERIAL PRIMARY KEY,
     data_tempo TIMESTAMP NOT NULL,

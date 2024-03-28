@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,7 +27,7 @@ public class Despesa {
     @Column(name = "descricao", length = 500, nullable = false, columnDefinition = "TEXT")
     private String descricao;
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<DespesaEvento> despesaEventos;
+    private Set<DespesaEvento> despesaEventos = new HashSet<>();
 
     public enum TipoDespesa {OUTROS}
 }

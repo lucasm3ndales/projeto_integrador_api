@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,11 +18,11 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Usuario {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", length = 125, nullable = false)
+    @Column(name = "nome", length = 125, nullable = false)
     private String nome;
     @Column(name = "email", length = 125, nullable = false)
     private String email;
@@ -38,9 +40,9 @@ public abstract class Usuario {
     @JsonIgnore
     private String senha;
     @OneToMany
-    private Set<Tramite> tramites;
+    private Set<Tramite> tramites = new HashSet<>();
 
-    public enum TipoUsuario {REITORIA, DEPARTAMENTO, SERVIDOR}
+    public enum TipoUsuario {MASTER, REITORIA, DEPARTAMENTO, SERVIDOR}
 
     @Override
     public boolean equals(Object o) {

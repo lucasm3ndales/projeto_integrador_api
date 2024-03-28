@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -53,11 +54,11 @@ public class Evento {
     @Embedded
     private Endereco endereco;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<DocEvento> documentos;
+    private Set<DocEvento> documentos = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<Tramite> tramites;
+    private Set<Tramite> tramites = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<DespesaEvento> despesaEventos;
+    private Set<DespesaEvento> despesaEventos = new HashSet<>();
 
     public enum TipoEvento {OUTROS}
 

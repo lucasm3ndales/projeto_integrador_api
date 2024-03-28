@@ -11,27 +11,19 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "repasse")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Repasse {
+public abstract class Repasse {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(name = "data_tempo", nullable = false)
     private Timestamp dataTempo;
     @Column(name = "valor", precision = 18, scale = 2, nullable = false)
     private BigDecimal valor;
-    @ManyToOne
-    @JoinColumn(name = "fk_reitoria")
-    @JsonManagedReference
-    private Reitoria reitoria;
-    @ManyToOne
-    @JoinColumn(name = "fk_departamento")
-    @JsonManagedReference
-    private Departamento departamento;
 
     @Override
     public boolean equals(Object o) {

@@ -16,7 +16,8 @@ import java.util.Objects;
 @NoArgsConstructor
 public abstract class Documento {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "documento_seq")
+    @SequenceGenerator(name = "documento_seq", sequenceName = "documento_seq", allocationSize = 1)
     private Long id;
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;

@@ -4,20 +4,23 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import poli.csi.projeto_integrador.dto.request.ReitoriaReqDto;
-import poli.csi.projeto_integrador.dto.request.VerbaReqDto;
+import poli.csi.projeto_integrador.dto.request.AlterarReitoriaDto;
+import poli.csi.projeto_integrador.dto.request.ReitoriaVerbaDto;
+import poli.csi.projeto_integrador.dto.request.SalvarReitoriaDto;
+import poli.csi.projeto_integrador.dto.response.ReitoriaStatusResDto;
 import poli.csi.projeto_integrador.dto.response.VerbaResDto;
 import poli.csi.projeto_integrador.model.Reitoria;
 import poli.csi.projeto_integrador.service.ReitoriaService;
 import java.util.List;
 
-@RestController(value = "/reitoria")
+@RestController
+@RequestMapping("/reitoria")
 @AllArgsConstructor
 public class ReitoriaController {
     private final ReitoriaService reitoriaService;
 
     @PostMapping("/salvar")
-    public ResponseEntity<String> salvarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
+    public ResponseEntity<String> salvarReitoria(@Valid @RequestBody SalvarReitoriaDto dto) {
         boolean res = reitoriaService.salvarReitoria(dto);
         if(res) {
             return ResponseEntity.ok("Reitoria salva com sucesso!");
@@ -26,7 +29,7 @@ public class ReitoriaController {
     }
 
     @PutMapping("/alterar")
-    public ResponseEntity<String> alterarReitoria(@Valid @RequestBody ReitoriaReqDto dto) {
+    public ResponseEntity<String> alterarReitoria(@Valid @RequestBody AlterarReitoriaDto dto) {
             boolean res = reitoriaService.alterarReitoria(dto);
             if(res) {
                 return ResponseEntity.ok("Dados da reitoria alterados com sucesso!");
@@ -35,11 +38,11 @@ public class ReitoriaController {
     }
 
     @PutMapping("/alterar/status/{id}")
-    public ResponseEntity<String> alterarStatusReitoria(@RequestParam("id") Long id) {
+    public ResponseEntity<?> alterarStatusReitoria(@PathVariable("id") Long id) {
         if(id != null) {
-            boolean res = reitoriaService.alterarStatusReitoria(id);
-            if(res) {
-                return ResponseEntity.ok("Status da reitoria alterado com sucesso! ");
+            ReitoriaStatusResDto res = reitoriaService.alterarStatusReitoria(id);
+            if(res != null) {
+                return ResponseEntity.ok(res);
             }
             return ResponseEntity.internalServerError().body("Erro ao alterar status da reitoria!");
         }
@@ -47,7 +50,7 @@ public class ReitoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarReitoria(@RequestParam("id") Long id) {
+    public ResponseEntity<?> buscarReitoria(@PathVariable("id") Long id) {
         if(id != null) {
             Reitoria res = reitoriaService.buscarReitoria(id);
             if(res != null) {
@@ -67,8 +70,8 @@ public class ReitoriaController {
         return ResponseEntity.ok(reitorias);
     }
 
-    @PostMapping("/verba-reitoria/adicionar")
-    public ResponseEntity<String>  adicionarVerbaReitoria(@Valid @RequestBody VerbaReqDto dto, @RequestHeader("timezone") String timezone) {
+    @PutMapping("/verba-reitoria/adicionar")
+    public ResponseEntity<String>  adicionarVerbaReitoria(@Valid @RequestBody ReitoriaVerbaDto dto, @RequestHeader("timezone") String timezone) {
             boolean res = reitoriaService.adicionarVerba(dto, timezone);
             if(res) {
                 return ResponseEntity.ok("Verba adicionada com sucesso!");

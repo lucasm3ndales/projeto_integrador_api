@@ -40,6 +40,10 @@ public class Usuario {
     @JsonIgnore
     private String senha;
     @OneToMany
+    @JoinTable(name = "usuario_tramite",
+            joinColumns = @JoinColumn(name = "fk_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "fk_tramite")
+    )
     private Set<Tramite> tramites = new HashSet<>();
 
     public enum TipoUsuario {MASTER, REITORIA, DEPARTAMENTO, SERVIDOR}

@@ -6,13 +6,20 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import poli.csi.projeto_integrador.exception.CustomException;
+import poli.csi.projeto_integrador.exception.ValidationError;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class AdviceController {
@@ -59,6 +66,22 @@ public class AdviceController {
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity<String> nullPointerExceptionHandler() {
         return ResponseEntity.internalServerError().body("Erro interno do servidor!");
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    protected ResponseEntity<String> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> methodArgumentNotValidExceptionExceptionHandler(MethodArgumentNotValidException ex) {
+        List<String> errors = new ArrayList<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.add(error.getDefaultMessage());
+        }
+
+        ErrorResponse errorResponse = new ValidationError(errors);
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(IOException.class)

@@ -1,6 +1,5 @@
 package poli.csi.projeto_integrador.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,8 @@ import java.util.Objects;
 @NoArgsConstructor
 public abstract class Repasse {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "repasse_seq")
+    @SequenceGenerator(name = "repasse_seq", sequenceName = "repasse_seq", allocationSize = 1)
     private Long id;
     @Column(name = "data_tempo", nullable = false)
     private Timestamp dataTempo;

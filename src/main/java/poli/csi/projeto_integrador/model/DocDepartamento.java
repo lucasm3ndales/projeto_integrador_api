@@ -17,6 +17,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DocDepartamento extends Documento{
     @ManyToOne
-    @JoinColumn(name = "fk_departamento")
+    @JoinColumn(name = "fk_departamento", nullable = false)
     private Departamento departamento;
 }

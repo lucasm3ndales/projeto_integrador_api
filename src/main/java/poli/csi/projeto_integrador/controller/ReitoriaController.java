@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import poli.csi.projeto_integrador.dto.request.AlterarReitoriaDto;
 import poli.csi.projeto_integrador.dto.request.ReitoriaVerbaDto;
 import poli.csi.projeto_integrador.dto.request.SalvarReitoriaDto;
-import poli.csi.projeto_integrador.dto.response.ReitoriaStatusResDto;
+import poli.csi.projeto_integrador.dto.response.StatusResDto;
 import poli.csi.projeto_integrador.dto.response.VerbaResDto;
 import poli.csi.projeto_integrador.model.Reitoria;
 import poli.csi.projeto_integrador.service.ReitoriaService;
@@ -40,7 +40,7 @@ public class ReitoriaController {
     @PutMapping("/alterar/status/{id}")
     public ResponseEntity<?> alterarStatusReitoria(@PathVariable("id") Long id) {
         if(id != null) {
-            ReitoriaStatusResDto res = reitoriaService.alterarStatusReitoria(id);
+            StatusResDto res = reitoriaService.alterarStatusReitoria(id);
             if(res != null) {
                 return ResponseEntity.ok(res);
             }

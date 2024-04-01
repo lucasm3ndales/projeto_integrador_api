@@ -8,25 +8,29 @@ import org.springframework.transaction.annotation.Transactional;
 import poli.csi.projeto_integrador.dto.request.AlterarReitoriaDto;
 import poli.csi.projeto_integrador.dto.request.ReitoriaVerbaDto;
 import poli.csi.projeto_integrador.dto.request.SalvarReitoriaDto;
-import poli.csi.projeto_integrador.dto.response.ReitoriaStatusResDto;
+import poli.csi.projeto_integrador.dto.response.StatusResDto;
 import poli.csi.projeto_integrador.dto.response.VerbaResDto;
+import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.Reitoria;
 import poli.csi.projeto_integrador.model.RepasseReitoria;
 import poli.csi.projeto_integrador.model.Usuario;
 import poli.csi.projeto_integrador.repository.ReitoriaRepository;
 import poli.csi.projeto_integrador.repository.RepasseReitoriaRepository;
+import poli.csi.projeto_integrador.repository.UsuarioRepository;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class ReitoriaService {
     private final ReitoriaRepository reitoriaRepository;
     private final RepasseReitoriaRepository repasseReitoriaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public Reitoria buscarReitoria(Long id) {
         return reitoriaRepository.findById(id)
@@ -34,19 +38,25 @@ public class ReitoriaService {
     }
 
     @Transactional
-    public ReitoriaStatusResDto alterarStatusReitoria(Long id) {
+    public StatusResDto alterarStatusReitoria(Long id) {
         Reitoria r = reitoriaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Reitoria não encontrada!"));
 
         r.setStatus(!r.getStatus());
 
         reitoriaRepository.save(r);
-        ReitoriaStatusResDto res = new ReitoriaStatusResDto(r.getStatus(), "Status alterado com sucesso!");
+        StatusResDto res = new StatusResDto(r.getStatus(), "Status alterado com sucesso!");
         return res;
     }
 
     @Transactional
     public boolean alterarReitoria(AlterarReitoriaDto dto) {
+        Optional<Usuario> usuario = usuarioRepository.findUsuarioByLogin(dto.login());
+
+        if(usuario.isPresent()) {
+            throw new CustomException("Nome de usuário informado já tem registro no sistema!");
+        }
+
         Reitoria r = reitoriaRepository.findById(dto.id())
                 .orElseThrow(() -> new EntityNotFoundException("Reitoria não encontrada!"));
 
@@ -71,6 +81,12 @@ public class ReitoriaService {
 
     @Transactional
     public boolean salvarReitoria(SalvarReitoriaDto dto) {
+        Optional<Usuario> usuario = usuarioRepository.findUsuarioByLogin(dto.login());
+
+        if(usuario.isPresent()) {
+            throw new CustomException("Nome de usuário informado já tem registro no sistema!");
+        }
+
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String encrypted = bcrypt.encode(dto.senha().trim());
 

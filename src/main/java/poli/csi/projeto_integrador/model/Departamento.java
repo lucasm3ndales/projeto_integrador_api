@@ -29,6 +29,6 @@ public class Departamento extends Usuario {
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<RepasseDepartamento> repasses = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany( mappedBy = "departamento", cascade = CascadeType.ALL)
     private Set<DocDepartamento> documentos = new HashSet<>();
 }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import poli.csi.projeto_integrador.exception.CustomException;
 
 public record AlterarDepartamentoDto(
-        @NotNull(message = "Id da reitoria nulo!")
+        @NotNull(message = "Id do departamento nulo!")
         Long id,
         @NotBlank(message = "Nome inválido!")
         @Size(min = 2, message = "Nome muito curto!")
@@ -20,21 +20,5 @@ public record AlterarDepartamentoDto(
         String telefone,
         @NotBlank(message = "Nome do responsável inválido!")
         @Size(min = 2, message = "Nome do responsável muito curto")
-        String responsavel,
-        String login,
-        String senha
-) {
-    public AlterarDepartamentoDto{
-        if(login != null && login.length() > 0 && (login.length() < 3 ||  login.isBlank())) {
-            throw new CustomException("Nome de usuário curto ou inválido!");
-        }
-
-        if(senha != null && senha.length() > 0 && (senha.length() < 6 ||  senha.isBlank())) {
-            throw new CustomException("Senha fraca ou inválida!");
-        }
-
-        if(senha != null && senha.length() > 0 && senha.equals(login)) {
-            throw new CustomException("Senha igual ao nome de usuário!");
-        }
-    }
-}
+        String responsavel
+) {}

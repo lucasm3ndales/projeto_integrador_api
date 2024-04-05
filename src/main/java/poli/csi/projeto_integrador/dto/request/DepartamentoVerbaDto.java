@@ -15,5 +15,5 @@ public record DepartamentoVerbaDto(
         @NotNull
         @Positive
         @Min(1)
-        BigDecimal verbaDepartamento
+        BigDecimal verba
 ) {}

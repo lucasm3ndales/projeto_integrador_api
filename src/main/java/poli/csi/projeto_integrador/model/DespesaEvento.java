@@ -11,6 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "despesa_evento")
+@IdClass(DespesaEventoId.class)
 @Getter
 @Setter
 @AllArgsConstructor

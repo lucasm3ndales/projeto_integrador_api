@@ -24,8 +24,6 @@ public class Despesa {
     @Column(name = "tipo", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TipoDespesa tipo;
-    @Column(name = "descricao", length = 500, nullable = false, columnDefinition = "TEXT")
-    private String descricao;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<DespesaEvento> despesaEventos = new HashSet<>();
 

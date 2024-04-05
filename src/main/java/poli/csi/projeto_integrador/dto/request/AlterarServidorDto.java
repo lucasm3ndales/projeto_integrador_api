@@ -1,10 +1,13 @@
 package poli.csi.projeto_integrador.dto.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import poli.csi.projeto_integrador.exception.CustomException;
 
-public record AlterarReitoriaDto(
-        @NotNull(message = "Id da reitoria nulo!")
+public record AlterarServidorDto(
+        @NotNull(message = "Id do servidor nulo!")
         Long id,
         @NotBlank(message = "Nome inválido!")
         @Size(min = 2, message = "Nome muito curto!")
@@ -14,8 +17,9 @@ public record AlterarReitoriaDto(
         String email,
         @NotBlank(message = "Telefone inválido!")
         @Size(min = 11, max = 11, message = "Formato de telefone inválido")
-        String telefone,
-        @NotBlank(message = "Nome do responsável inválido!")
-        @Size(min = 2, message = "Nome do responsável muito curto")
-        String responsavel
-) {}
+        String telefone
+) {
+    public AlterarServidorDto {
+
+    }
+}

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import poli.csi.projeto_integrador.exception.CustomException;
@@ -87,5 +88,10 @@ public class AdviceController {
     @ExceptionHandler(IOException.class)
     protected ResponseEntity<String> ioExceptionHandler() {
         return ResponseEntity.internalServerError().body("Erro interno do servidor!");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<String> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

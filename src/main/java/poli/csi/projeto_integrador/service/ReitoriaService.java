@@ -51,10 +51,10 @@ public class ReitoriaService {
 
     @Transactional
     public boolean alterarReitoria(AlterarReitoriaDto dto) {
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByLogin(dto.login());
+        Optional<Usuario> usuario = usuarioRepository.findUsuarioByEmail(dto.email());
 
-        if(usuario.isPresent()) {
-            throw new CustomException("Nome de usuário informado já tem registro no sistema!");
+        if(usuario.isPresent() && !usuario.get().getId().equals(dto.id())) {
+            throw new CustomException("E-mail informado já tem registro no sistema!");
         }
 
         Reitoria r = reitoriaRepository.findById(dto.id())
@@ -64,16 +64,6 @@ public class ReitoriaService {
         r.setEmail(dto.email().trim());
         r.setTelefone(dto.telefone());
         r.setResponsavel(dto.responsavel().trim());
-
-        if(!dto.login().isEmpty()) {
-            r.setLogin(dto.login().trim());
-        }
-
-        if(!dto.senha().isEmpty()) {
-            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-            String encrypted = bcrypt.encode(dto.senha().trim());
-            r.setSenha(encrypted);
-        }
 
         reitoriaRepository.save(r);
         return true;

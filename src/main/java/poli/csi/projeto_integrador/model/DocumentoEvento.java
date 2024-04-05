@@ -8,16 +8,14 @@ import lombok.Setter;
 import java.util.Objects;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "documento")
+@Table(name = "documento_evento")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Documento {
+public class DocumentoEvento {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "documento_seq")
-    @SequenceGenerator(name = "documento_seq", sequenceName = "documento_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
@@ -26,6 +24,9 @@ public abstract class Documento {
     private TipoDocumento tipo;
     @Column(name = "doc", nullable = false, columnDefinition = "BYTEA")
     private byte[] doc;
+    @ManyToOne
+    @JoinColumn(name = "fk_evento")
+    private Evento evento;
 
     public enum TipoDocumento {OUTROS}
 
@@ -34,7 +35,7 @@ public abstract class Documento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Documento doc = (Documento) o;
+        DocumentoEvento doc = (DocumentoEvento) o;
         return Objects.equals(id, doc.id);
     }
 

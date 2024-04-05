@@ -28,6 +28,7 @@ public class Evento {
     @Enumerated(EnumType.STRING)
     private TipoEvento tipo;
     @Column(name = "periodicidade", length = 63, nullable = false)
+    @Enumerated(EnumType.STRING)
     private Periodicidade periodicidade;
     @Column(name = "data_inicio", nullable = false)
     private LocalDate dataInicio;
@@ -37,7 +38,7 @@ public class Evento {
     private LocalDate dataIda;
     @Column(name = "data_volta", nullable = false)
     private LocalDate dataVolta;
-    @Column(name = "objetivo", length = 500,nullable = false, columnDefinition = "TEXT")
+    @Column(name = "objetivo", length = 500, nullable = false, columnDefinition = "TEXT")
     private String objetivo;
     @Column(name = "participantes", nullable = false)
     private Integer participantes;
@@ -54,7 +55,7 @@ public class Evento {
     @Embedded
     private Endereco endereco;
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<DocEvento> documentos = new HashSet<>();
+    private Set<DocumentoEvento> documentos = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private Set<Tramite> tramites = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)

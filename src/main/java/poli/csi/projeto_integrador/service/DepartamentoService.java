@@ -66,10 +66,10 @@ public class DepartamentoService {
     
     @Transactional
     public boolean alterarDepartamento(AlterarDepartamentoDto dto) {
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByLogin(dto.login());
+        Optional<Usuario> usuario = usuarioRepository.findUsuarioByEmail(dto.email());
 
-        if(usuario.isPresent()) {
-            throw new CustomException("Nome de usuário informado já tem registro no sistema!");
+        if(usuario.isPresent() && !usuario.get().getId().equals(dto.id())) {
+            throw new CustomException("E-mail informado já tem registro no sistema!");
         }
 
         Departamento dep = departamentoRepository.findById(dto.id())
@@ -79,16 +79,7 @@ public class DepartamentoService {
         dep.setEmail(dto.email().trim());
         dep.setTelefone(dto.telefone().trim());
         dep.setResponsavel(dto.responsavel().trim());
-        
-        if(!dto.login().isEmpty()) {
-            dep.setLogin(dto.login().trim());
-        }
 
-        if(!dto.senha().isEmpty()) {
-            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-            String encrypted = bcrypt.encode(dto.senha().trim());
-            dep.setSenha(encrypted);
-        }
         departamentoRepository.save(dep);
         return true;
     }
@@ -123,12 +114,12 @@ public class DepartamentoService {
         RepasseDepartamento  rd = new RepasseDepartamento();
         rd.setReitoria(reitoria);
         rd.setDepartamento(dep);
-        rd.setValor(dto.verbaDepartamento());
+        rd.setValor(dto.verba());
         rd.setDataTempo(gerarTimestamp(timezone));
         repasseDepartamentoRepository.save(rd);
 
-        BigDecimal somaDep = dep.getVerba().add(dto.verbaDepartamento());
-        BigDecimal subReit = reitoria.getVerba().subtract(dto.verbaDepartamento());
+        BigDecimal somaDep = dep.getVerba().add(dto.verba());
+        BigDecimal subReit = reitoria.getVerba().subtract(dto.verba());
         dep.setVerba(somaDep);
         reitoria.setVerba(subReit);
 

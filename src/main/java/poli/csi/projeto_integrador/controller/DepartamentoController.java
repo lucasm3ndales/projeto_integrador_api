@@ -59,7 +59,7 @@ public class DepartamentoController {
             if(res != null) {
                 return ResponseEntity.ok(res);
             }
-            return ResponseEntity.internalServerError().body("Erro ao buscar departamento!");
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.badRequest().body("Id do departamento nulo!");
     }

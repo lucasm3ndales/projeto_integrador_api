@@ -15,6 +15,4 @@ import java.util.Set;
 public class Servidor extends Usuario {
     @Column(name = "matricula", length = 7, unique = true, nullable = false)
     private String matricula;
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<DocServidor> documentos = new HashSet<>();
 }

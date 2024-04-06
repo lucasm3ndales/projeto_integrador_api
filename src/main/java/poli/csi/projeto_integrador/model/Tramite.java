@@ -33,7 +33,7 @@ public class Tramite {
     @JoinColumn(name = "fk_evento")
     private Evento evento;
 
-    public enum StatusTramite {EM_TRAMITE, ENCERRADO}
+    public enum StatusTramite {EM_ABERTO, ENCERRADO}
 
     @Override
     public boolean equals(Object o) {

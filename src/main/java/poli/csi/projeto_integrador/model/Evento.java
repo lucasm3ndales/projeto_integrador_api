@@ -63,7 +63,7 @@ public class Evento {
 
     public enum TipoEvento {OUTROS}
 
-    public enum StatusEvento {ACEITO, RECUSADO, PENDENTE}
+    public enum StatusEvento {ACEITO, RECUSADO, PENDENTE, TRAMITADO}
 
     public enum Periodicidade {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
 

@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
+import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
+import poli.csi.projeto_integrador.dto.response.EventoStatusResDto;
 import poli.csi.projeto_integrador.service.EventoService;
 
 @RestController
@@ -37,5 +39,16 @@ public class EventoController {
         return ResponseEntity.internalServerError().body("Erro alterar dados do evento!");
     }
 
-    //TODO: Método para alterar status do evento (ACEITO, RECUSADO)
+    @PutMapping("/alterar/status")
+    public ResponseEntity<?> alterarStatusEvento(
+            @Valid @RequestBody AlterarStatusEventoDto dto,
+            @RequestHeader(value = "timezone") String timezone
+    ) {
+        EventoStatusResDto res = eventoService.alterarStatusEvento(dto, timezone);
+        if(res != null) {
+            return ResponseEntity.ok(res);
+        }
+        return ResponseEntity.internalServerError().body("Erro ao alterar status do evento!");
+    }
+
 }

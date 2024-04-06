@@ -1,9 +1,8 @@
 package poli.csi.projeto_integrador.dto.request;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import poli.csi.projeto_integrador.exception.CustomException;
 
 import java.math.BigDecimal;
 
@@ -14,6 +13,6 @@ public record DepartamentoVerbaDto(
         Long departamentoId,
         @NotNull
         @Positive
-        @Min(1)
+        @DecimalMin(value = "0")
         BigDecimal verba
 ) {}

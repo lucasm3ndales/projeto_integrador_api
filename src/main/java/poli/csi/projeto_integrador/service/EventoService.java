@@ -5,17 +5,15 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
+import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
+import poli.csi.projeto_integrador.dto.response.EventoStatusResDto;
 import poli.csi.projeto_integrador.exception.CustomException;
-import poli.csi.projeto_integrador.model.Departamento;
-import poli.csi.projeto_integrador.model.Endereco;
-import poli.csi.projeto_integrador.model.Evento;
-import poli.csi.projeto_integrador.model.Servidor;
-import poli.csi.projeto_integrador.repository.DepartamentoRepository;
-import poli.csi.projeto_integrador.repository.EventoRepository;
-import poli.csi.projeto_integrador.repository.ReitoriaRepository;
-import poli.csi.projeto_integrador.repository.ServidorRepository;
+import poli.csi.projeto_integrador.model.*;
+import poli.csi.projeto_integrador.repository.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -30,6 +28,7 @@ public class EventoService {
     private final TramiteService tramiteService;
     private final DocumentoService documentoService;
     private final DespesaService despesaService;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional
     public boolean salvarEvento(SalvarEventoDto dto, String timezone) {
@@ -105,8 +104,102 @@ public class EventoService {
         }
     }
 
+    //TODO: Pensar se será inportante alterar o evento
     @Transactional
     public boolean alterarEvento(AlterarEventoDto dto) {
+        return true;
+    }
+
+    @Transactional
+    public EventoStatusResDto alterarStatusEvento(AlterarStatusEventoDto dto, String timezone) {
+        Evento evento = eventoRepository.findById(dto.eventoId())
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+
+        Evento.StatusEvento status = null;
+        status = Evento.StatusEvento.valueOf(dto.status());
+
+        if((status == null) || (status == Evento.StatusEvento.PENDENTE)) {
+            throw new CustomException("Status do evento inválido!");
+        }
+
+        evento.setStatus(status);
+
+        Usuario usuario = usuarioRepository.findById(dto.usuarioId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
+
+        if(usuario.getRole() == Usuario.TipoUsuario.DEPARTAMENTO) {
+            if(evento.getStatus() == Evento.StatusEvento.ACEITO) {
+                if(evento.getCusto().compareTo(dto.aporte()) == 0) {
+                    evento.setAporteDep(dto.aporte());
+                    evento.setAporteReit(BigDecimal.ZERO);
+
+                    Tramite primeiroTramite = null;
+                    Instant dataAntiga = null;
+                    for(Tramite tramite : evento.getTramites()) {
+                        Instant dataTempo = tramite.getDataTempo().toInstant();
+                        if (dataTempo == null || dataTempo.isBefore(dataAntiga)) {
+                            dataTempo = dataTempo;
+                            primeiroTramite = tramite;
+                        }
+                    }
+
+                    if(primeiroTramite == null) {
+                        throw new CustomException("Erro ao validar tramites do evento!");
+                    }
+
+                    Usuario destino = primeiroTramite.getOrigem();
+
+                    boolean res = tramiteService.retornarTramite(evento, usuario, destino, timezone);
+
+                    if(!res) {
+                        throw new CustomException("Erro ao alterar status do evento!");
+                    }
+                    return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
+                }
+                throw new CustomException("Aporte insuficiente para o custo do evento!");
+            }
+
+            if(evento.getStatus() == Evento.StatusEvento.RECUSADO) {
+                evento.setAporteDep(BigDecimal.ZERO);
+                evento.setAporteReit(BigDecimal.ZERO);
+
+                Tramite primeiroTramite = null;
+                Instant dataAntiga = null;
+                for(Tramite tramite : evento.getTramites()) {
+                    Instant dataTempo = tramite.getDataTempo().toInstant();
+                    if (dataTempo == null || dataTempo.isBefore(dataAntiga)) {
+                        dataTempo = dataTempo;
+                        primeiroTramite = tramite;
+                    }
+                }
+
+                if(primeiroTramite == null) {
+                    throw new CustomException("Erro ao validar tramites do evento!");
+                }
+
+                Usuario destino = primeiroTramite.getOrigem();
+                return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
+            }
+
+            if(evento.getStatus() == Evento.StatusEvento.TRAMITADO) {
+                if(evento.getCusto().compareTo(dto.aporte()) == 0 || evento.getCusto().compareTo(dto.aporte()) == -1) {
+                    throw new CustomException("Aporte inválido para tramitação do evento!");
+                }
+            }
+        } else if(usuario.getRole() == Usuario.TipoUsuario.REITORIA) {
+            if(evento.getStatus() == Evento.StatusEvento.ACEITO) {
+                if(evento.getCusto().compareTo(dto.aporte()) == 0) {
+
+                }
+                throw new CustomException("Aporte insuficiente para o custo do evento!");
+            }
+
+            if(evento.getStatus() == Evento.StatusEvento.RECUSADO) {
+                return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
+            }
+        } else {
+            throw new CustomException("Usuário não autorizado!");
+        }
 
     }
 }

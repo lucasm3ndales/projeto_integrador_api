@@ -18,7 +18,7 @@ public class TramiteService {
 
     public boolean salvarTramite(Evento evento, Usuario origem, Usuario destino, String timezone) {
         Tramite tramite = new Tramite();
-        tramite.setStatus(Tramite.StatusTramite.EM_TRAMITE);
+        tramite.setStatus(Tramite.StatusTramite.EM_ABERTO);
         tramite.setDataTempo(gerarTimestamp(timezone));
         tramite.setEvento(evento);
         tramite.setOrigem(origem);
@@ -27,6 +27,18 @@ public class TramiteService {
         return true;
     }
 
+    public boolean retornarTramite(Evento evento, Usuario origem, Usuario destino, String timezone) {
+        Tramite tramite = new Tramite();
+        tramite.setStatus(Tramite.StatusTramite.ENCERRADO);
+        tramite.setDataTempo(gerarTimestamp(timezone));
+        tramite.setEvento(evento);
+        tramite.setOrigem(origem);
+        tramite.setDestino(destino);
+        tramiteRepository.save(tramite);
+        return true;
+    }
+
+    //TODO: Talvez remover esse método mais  para frente
     public boolean salvarTramite(Long evento, Long origem, Long destino, String timezone) {
         return true;
     }

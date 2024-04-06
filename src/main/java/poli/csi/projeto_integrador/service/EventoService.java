@@ -128,33 +128,32 @@ public class EventoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
 
         if(usuario.getRole() == Usuario.TipoUsuario.DEPARTAMENTO) {
+            Tramite primeiroTramite = null;
+            Instant dataAntiga = null;
+            for(Tramite tramite : evento.getTramites()) {
+                Instant dataTempo = tramite.getDataTempo().toInstant();
+                if (dataAntiga == null || dataTempo.isBefore(dataAntiga)) {
+                    dataAntiga = dataTempo;
+                    primeiroTramite = tramite;
+                }
+            }
+
+            if(primeiroTramite == null) {
+                throw new CustomException("Erro ao validar tramites do evento!");
+            }
+
+            Usuario destino = primeiroTramite.getOrigem();
+
+            boolean res = tramiteService.retornarTramite(evento, usuario, destino, timezone);
+
+            if(!res) {
+                throw new CustomException("Erro ao alterar status do evento!");
+            }
+
             if(evento.getStatus() == Evento.StatusEvento.ACEITO) {
                 if(evento.getCusto().compareTo(dto.aporte()) == 0) {
                     evento.setAporteDep(dto.aporte());
                     evento.setAporteReit(BigDecimal.ZERO);
-
-                    Tramite primeiroTramite = null;
-                    Instant dataAntiga = null;
-                    for(Tramite tramite : evento.getTramites()) {
-                        Instant dataTempo = tramite.getDataTempo().toInstant();
-                        if (dataTempo == null || dataTempo.isBefore(dataAntiga)) {
-                            dataTempo = dataTempo;
-                            primeiroTramite = tramite;
-                        }
-                    }
-
-                    if(primeiroTramite == null) {
-                        throw new CustomException("Erro ao validar tramites do evento!");
-                    }
-
-                    Usuario destino = primeiroTramite.getOrigem();
-
-                    boolean res = tramiteService.retornarTramite(evento, usuario, destino, timezone);
-
-                    if(!res) {
-                        throw new CustomException("Erro ao alterar status do evento!");
-                    }
-                    return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
                 }
                 throw new CustomException("Aporte insuficiente para o custo do evento!");
             }
@@ -162,44 +161,61 @@ public class EventoService {
             if(evento.getStatus() == Evento.StatusEvento.RECUSADO) {
                 evento.setAporteDep(BigDecimal.ZERO);
                 evento.setAporteReit(BigDecimal.ZERO);
-
-                Tramite primeiroTramite = null;
-                Instant dataAntiga = null;
-                for(Tramite tramite : evento.getTramites()) {
-                    Instant dataTempo = tramite.getDataTempo().toInstant();
-                    if (dataTempo == null || dataTempo.isBefore(dataAntiga)) {
-                        dataTempo = dataTempo;
-                        primeiroTramite = tramite;
-                    }
-                }
-
-                if(primeiroTramite == null) {
-                    throw new CustomException("Erro ao validar tramites do evento!");
-                }
-
-                Usuario destino = primeiroTramite.getOrigem();
-                return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
             }
 
             if(evento.getStatus() == Evento.StatusEvento.TRAMITADO) {
                 if(evento.getCusto().compareTo(dto.aporte()) == 0 || evento.getCusto().compareTo(dto.aporte()) == -1) {
                     throw new CustomException("Aporte inválido para tramitação do evento!");
                 }
+                evento.setAporteDep(dto.aporte());
+                evento.setAporteReit(BigDecimal.ZERO);
             }
-        } else if(usuario.getRole() == Usuario.TipoUsuario.REITORIA) {
-            if(evento.getStatus() == Evento.StatusEvento.ACEITO) {
-                if(evento.getCusto().compareTo(dto.aporte()) == 0) {
 
+            return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
+        } else if(usuario.getRole() == Usuario.TipoUsuario.REITORIA) {
+            Tramite primeiroTramite = null;
+            Instant dataAntiga = null;
+            for(Tramite tramite : evento.getTramites()) {
+                Instant dataTempo = tramite.getDataTempo().toInstant();
+                if (dataAntiga == null || dataTempo.isBefore(dataAntiga)) {
+                    dataAntiga = dataTempo;
+                    primeiroTramite = tramite;
+                }
+            }
+
+            if(primeiroTramite == null) {
+                throw new CustomException("Erro ao validar tramites do evento!");
+            }
+
+            Usuario destino = primeiroTramite.getOrigem();
+
+            boolean res = tramiteService.retornarTramite(evento, usuario, destino, timezone);
+
+            if(!res) {
+                throw new CustomException("Erro ao alterar status do evento!");
+            }
+
+            if(evento.getStatus() == Evento.StatusEvento.ACEITO) {
+                BigDecimal diferenca = evento.getCusto().subtract(evento.getAporteDep());
+                if(diferenca.compareTo(dto.aporte()) == 0) {
+                    evento.setAporteReit(dto.aporte());
                 }
                 throw new CustomException("Aporte insuficiente para o custo do evento!");
             }
 
             if(evento.getStatus() == Evento.StatusEvento.RECUSADO) {
-                return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
+                evento.setAporteReit(BigDecimal.ZERO);
             }
+
+            return new EventoStatusResDto(evento.getStatus().name(), "Status do evento alterado com sucesso!");
         } else {
             throw new CustomException("Usuário não autorizado!");
         }
 
+    }
+
+    public Evento buscarEvento(Long id) {
+        return eventoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
     }
 }

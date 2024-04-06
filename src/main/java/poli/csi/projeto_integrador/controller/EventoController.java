@@ -8,6 +8,7 @@ import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
 import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
 import poli.csi.projeto_integrador.dto.response.EventoStatusResDto;
+import poli.csi.projeto_integrador.model.Evento;
 import poli.csi.projeto_integrador.service.EventoService;
 
 @RestController
@@ -49,6 +50,20 @@ public class EventoController {
             return ResponseEntity.ok(res);
         }
         return ResponseEntity.internalServerError().body("Erro ao alterar status do evento!");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarEvento(
+            @PathVariable("id") Long id
+    ) {
+        if(id != null) {
+            Evento evento = eventoService.buscarEvento(id);
+            if(evento != null) {
+                return ResponseEntity.ok(evento);
+            }
+            return ResponseEntity.notFound().build();
+        }
+        return  ResponseEntity.badRequest().body("Id do evento nulo!");
     }
 
 }

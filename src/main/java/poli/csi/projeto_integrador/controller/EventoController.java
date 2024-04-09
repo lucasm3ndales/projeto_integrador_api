@@ -2,8 +2,12 @@ package poli.csi.projeto_integrador.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import poli.csi.projeto_integrador.dto.filter.FiltroEvento;
 import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
 import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
@@ -31,9 +35,10 @@ public class EventoController {
 
     @PutMapping("/alterar")
     public ResponseEntity<String> alterarEvento(
-            @Valid @RequestBody AlterarEventoDto dto
+            @Valid @RequestBody AlterarEventoDto dto,
+            @RequestHeader(value = "timezone") String timezone
     ) {
-        boolean res = eventoService.alterarEvento(dto);
+        boolean res = eventoService.alterarEvento(dto, timezone);
         if(res) {
             return ResponseEntity.ok("Dados do evento alterados com sucesso!");
         }
@@ -64,6 +69,25 @@ public class EventoController {
             return ResponseEntity.notFound().build();
         }
         return  ResponseEntity.badRequest().body("Id do evento nulo!");
+    }
+
+    @GetMapping("/eventos/{id}")
+    public ResponseEntity<?> buscarEventos(
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @PathVariable("id") Long id,
+            @RequestParam(value = "nome", required = false) String nome,
+            @RequestParam(value = "tipo", required = false) String tipo,
+            @RequestParam(value = "periodicidade", required = false) String periodicidade
+    ) {
+        if(id != null) {
+            FiltroEvento filtro = new FiltroEvento(nome, tipo, periodicidade);
+            Page<Evento> res = eventoService.buscarEventos(id, pageable, filtro);
+            if(res.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(res);
+        }
+        return ResponseEntity.badRequest().body("Id de usuário nulo!");
     }
 
 }

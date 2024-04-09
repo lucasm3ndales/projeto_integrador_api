@@ -98,9 +98,9 @@ public class DepartamentoService {
     }
 
     private boolean isFilter(FiltroDepartamento filtro) {
-        return filtro.nome() != null && !filtro.nome().isBlank()||
+        return filtro.nome() != null ||
                 filtro.status() != null ||
-                filtro.responsavel() != null && !filtro.responsavel().isBlank();
+                filtro.responsavel() != null;
     }
 
     @Transactional

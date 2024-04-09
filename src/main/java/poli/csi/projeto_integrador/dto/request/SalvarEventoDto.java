@@ -47,9 +47,9 @@ public record SalvarEventoDto(
         String numero,
         String complemento,
         @Valid
-        Set<DocumentoDto> documentos,
+        Set<SalvarDocumentoDto> documentos,
         @Valid
-        Set<DespesaDto> despesas,
+        Set<SalvarDespesaDto> despesas,
         @NotNull(message = "Id do departamento nulo!")
         Long departamentoId,
         @NotNull(message = "Id do servidor nulo!")

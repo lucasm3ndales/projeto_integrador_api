@@ -2,7 +2,7 @@ package poli.csi.projeto_integrador.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import poli.csi.projeto_integrador.dto.request.DespesaDto;
+import poli.csi.projeto_integrador.dto.request.SalvarDespesaDto;
 import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.Despesa;
 import poli.csi.projeto_integrador.model.DespesaEvento;
@@ -21,7 +21,7 @@ public class DespesaService {
     private final DespesaRepository despesaRepository;
     private final DespesaEventoRepository despesaEventoRepository;
 
-    public boolean salvarDespesas(Set<DespesaDto> despesasDto, Evento evento, String timezone) {
+    public boolean salvarDespesas(Set<SalvarDespesaDto> despesasDto, Evento evento, String timezone) {
         despesasDto.forEach(dto -> {
 
             Despesa.TipoDespesa tipo = null;

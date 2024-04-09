@@ -38,11 +38,6 @@ public class TramiteService {
         return true;
     }
 
-    //TODO: Talvez remover esse método mais  para frente
-    public boolean salvarTramite(Long evento, Long origem, Long destino, String timezone) {
-        return true;
-    }
-
     private Timestamp gerarTimestamp(String timezone) {
         Instant i = Instant.now().atZone(ZoneId.of(timezone)).toInstant();
         return Timestamp.from(i);

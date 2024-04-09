@@ -2,7 +2,7 @@ CREATE TABLE usuario
 (
     id       BIGSERIAL PRIMARY KEY,
     nome     VARCHAR(125) NOT NULL,
-    email    VARCHAR(125) NOT NULL UNIQUE ,
+    email    VARCHAR(125) NOT NULL UNIQUE,
     telefone VARCHAR(11)  NOT NULL,
     status   BOOLEAN      NOT NULL,
     role     VARCHAR(63)  NOT NULL,
@@ -132,9 +132,9 @@ CREATE TABLE usuario_tramite
 
 CREATE TABLE despesa
 (
-    id        BIGSERIAL PRIMARY KEY,
-    nome      VARCHAR(100) NOT NULL,
-    tipo      VARCHAR(63)  NOT NULL,
+    id   BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    tipo VARCHAR(63)  NOT NULL,
 );
 
 CREATE TABLE despesa_evento
@@ -142,7 +142,8 @@ CREATE TABLE despesa_evento
     fk_despesa    BIGINT         NOT NULL,
     fk_evento     BIGINT         NOT NULL,
     valor         DECIMAL(12, 2) NOT NULL,
-    data_tempo    TIMESTAMP      NOT NULL,
+    criado_em    TIMESTAMP      NOT NULL,
+    alterado_em    TIMESTAMP      NOT NULL,
     justificativa TEXT,
 
     CONSTRAINT pk_despesa_evento PRIMARY KEY (fk_evento, fk_despesa),

@@ -27,8 +27,8 @@ public class RepasseService {
     }
 
     private boolean isFiltroReit(FiltroRepasseReitoria filtro) {
-        return filtro.dataInicio() != null && !filtro.dataInicio().isBlank() ||
-                filtro.dataFim() != null && !filtro.dataFim().isBlank();
+        return filtro.dataInicio() != null||
+                filtro.dataFim() != null;
     }
 
     public Page<RepasseDepartamento> buscarRepassesDepartamento(Long id, Pageable pageable, FiltroRepasseDepartamento filtro) {
@@ -40,7 +40,7 @@ public class RepasseService {
     }
 
     private boolean isFiltroDep(FiltroRepasseDepartamento filtro) {
-        return filtro.dataInicio() != null && !filtro.dataInicio().isBlank() ||
-                filtro.dataFim() != null && !filtro.dataFim().isBlank();
+        return filtro.dataInicio() != null||
+                filtro.dataFim() != null;
     }
 }

@@ -96,7 +96,7 @@ public class ServidorService {
     }
 
     private boolean isFiltro(FiltroServidor filtro) {
-        return filtro.nome() != null && !filtro.nome().isBlank() ||
-                filtro.matricula() != null && !filtro.matricula().isBlank();
+        return filtro.nome() != null ||
+                filtro.matricula() != null;
     }
 }

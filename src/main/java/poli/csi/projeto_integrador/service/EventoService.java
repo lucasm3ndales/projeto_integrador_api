@@ -3,7 +3,11 @@ package poli.csi.projeto_integrador.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import poli.csi.projeto_integrador.dto.filter.FiltroEvento;
 import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
 import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
@@ -104,9 +108,56 @@ public class EventoService {
         }
     }
 
-    //TODO: Pensar se será inportante alterar o evento
+    //!!!Talvez seja removido!!!
     @Transactional
-    public boolean alterarEvento(AlterarEventoDto dto) {
+    public boolean alterarEvento(AlterarEventoDto dto, String timezone) {
+        Evento.TipoEvento tipo = null;
+        tipo = Evento.TipoEvento.valueOf(dto.tipo().trim());
+
+        if(tipo == null) {
+            throw new CustomException("Tipo do evento inválido!");
+        }
+
+        Evento.Periodicidade periodicidade = null;
+        periodicidade = Evento.Periodicidade.valueOf(dto.periodicidade().trim());
+
+        if(periodicidade == null) {
+            throw new CustomException("Periodicidade do evento inválida!");
+        }
+
+        Evento evento = eventoRepository.findById(dto.eventoId())
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+
+        evento.getEndereco().setPais(dto.pais().toLowerCase().trim());
+        evento.getEndereco().setEstado(dto.estado().toLowerCase().trim());
+        evento.getEndereco().setCidade(dto.cidade().toLowerCase().trim());
+        evento.getEndereco().setBairro(dto.bairro().toLowerCase().trim());
+        evento.getEndereco().setRua(dto.rua().toLowerCase().trim());
+        evento.getEndereco().setNumero(dto.numero().toLowerCase().trim());
+        evento.getEndereco().setComplemento(dto.complemento());
+
+        evento.setNome(dto.nome().trim());
+        evento.setTipo(tipo);
+        evento.setPeriodicidade(periodicidade);
+        evento.setDataInicio(convertToLocalDate(dto.dataInicio()));
+        evento.setDataFim(convertToLocalDate(dto.dataFim()));
+        evento.setDataIda(convertToLocalDate(dto.dataIda()));
+        evento.setDataVolta(convertToLocalDate(dto.dataVolta()));
+        evento.setObjetivo(dto.objetivo().trim());
+        evento.setParticipantes(dto.participantes());
+        evento.setCusto(dto.custo());
+        eventoRepository.save(evento);
+
+        boolean res1 = despesaService.alterarDespesas(dto.despesas(), evento, timezone);
+        if (!res1) {
+            return false;
+        }
+
+        boolean res2 = documentoService.alterarDocumentos(dto.documentos(), evento);
+        if (!res2) {
+            return false;
+        }
+
         return true;
     }
 
@@ -217,5 +268,20 @@ public class EventoService {
     public Evento buscarEvento(Long id) {
         return eventoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+    }
+
+
+    public Page<Evento> buscarEventos(Long id, Pageable pageable, FiltroEvento filtro) {
+        if(isFilter(filtro)) {
+            Specification<Evento> spec = EventoRepository.eventoSpec(id, filtro);
+            return eventoRepository.findAll(spec, pageable);
+        }
+        return eventoRepository.buscarTodosEventos(id, pageable);
+    }
+
+    boolean isFilter(FiltroEvento filtro) {
+        return filtro.nome() != null ||
+                filtro.tipo() != null ||
+                filtro.periodicidade() != null;
     }
 }

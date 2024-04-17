@@ -46,24 +46,24 @@ public class EventoService {
                 .orElseThrow(() -> new EntityNotFoundException("Departamento não encontrado!"));
 
         Evento.TipoEvento tipo = null;
-        tipo = Evento.TipoEvento.valueOf(dto.tipo().trim());
-
-        if(tipo == null) {
-            throw new CustomException("Tipo do evento inválido!");
+        try{
+            tipo = Evento.TipoEvento.valueOf(dto.tipo().trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Tipo do evento inválido!");
         }
 
         Evento.Periodicidade periodicidade = null;
-        periodicidade = Evento.Periodicidade.valueOf(dto.periodicidade().trim());
-
-        if(periodicidade == null) {
-            throw new CustomException("Periodicidade do evento inválida!");
+        try{
+            periodicidade = Evento.Periodicidade.valueOf(dto.periodicidade().trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Periodicidade do evento inválida!");
         }
 
         Tramite.StatusTramite status = null;
-        status = Tramite.StatusTramite.valueOf(dto.statusTramite());
-
-        if(status == null) {
-            throw new CustomException("Status do trâmite inválido!");
+        try{
+            status = Tramite.StatusTramite.valueOf(dto.statusTramite().trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Status do evento inválido!");
         }
 
         Endereco endereco = new Endereco(
@@ -123,18 +123,19 @@ public class EventoService {
     @Transactional
     public boolean alterarEvento(AlterarEventoDto dto, String timezone) {
         Evento.TipoEvento tipo = null;
-        tipo = Evento.TipoEvento.valueOf(dto.tipo().trim());
-
-        if(tipo == null) {
-            throw new CustomException("Tipo do evento inválido!");
+        try{
+            tipo = Evento.TipoEvento.valueOf(dto.tipo().trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Tipo do evento inválido!");
         }
 
         Evento.Periodicidade periodicidade = null;
-        periodicidade = Evento.Periodicidade.valueOf(dto.periodicidade().trim());
-
-        if(periodicidade == null) {
-            throw new CustomException("Periodicidade do evento inválida!");
+        try{
+            periodicidade = Evento.Periodicidade.valueOf(dto.periodicidade().trim());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Periodicidade do evento inválida!");
         }
+
 
         Evento evento = eventoRepository.findById(dto.eventoId())
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));

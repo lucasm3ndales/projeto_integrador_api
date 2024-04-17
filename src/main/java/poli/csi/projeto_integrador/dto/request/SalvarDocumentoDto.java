@@ -9,6 +9,8 @@ public record SalvarDocumentoDto(
         @NotBlank(message = "Tipo de documento inválido!")
         String tipo,
         @NotNull(message = "Documento sem corpo!")
-        String doc
+        String doc,
+        @NotBlank(message = "Extensão de documento inválida!")
+        String extensao
 ) {
 }

@@ -91,22 +91,23 @@ CREATE TABLE evento
 
 CREATE TABLE documento_evento
 (
-    id        BIGSERIAL PRIMARY KEY,
-    nome      VARCHAR(100) NOT NULL,
-    tipo      VARCHAR(63)  NOT NULL,
-    doc       BYTEA        NOT NULL,
-    fk_evento BIGINT       NOT NULL,
-    criado_em TIMESTAMP NOT NULL,
-    fk_usuario BIGINT NOT NULL,
+    id         BIGSERIAL PRIMARY KEY,
+    nome       VARCHAR(100) NOT NULL,
+    tipo       VARCHAR(63)  NOT NULL,
+    doc        BYTEA        NOT NULL,
+    extensao   VARCHAR(5)   NOT NULL,
+    fk_evento  BIGINT       NOT NULL,
+    criado_em  TIMESTAMP    NOT NULL,
+    fk_usuario BIGINT       NOT NULL,
 
-    FOREIGN KEY (fk_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (fk_usuario) REFERENCES usuario (id),
     FOREIGN KEY (fk_evento) REFERENCES evento (id)
 );
 
 CREATE TABLE tramite
 (
     id         BIGSERIAL PRIMARY KEY,
-    criado_em TIMESTAMP   NOT NULL,
+    criado_em  TIMESTAMP   NOT NULL,
     status     VARCHAR(63) NOT NULL,
     fk_origem  BIGINT      NOT NULL,
     fk_destino BIGINT      NOT NULL,

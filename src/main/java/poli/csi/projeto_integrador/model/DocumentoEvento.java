@@ -36,8 +36,13 @@ public class DocumentoEvento {
     @ManyToOne
     @JoinColumn(name = "fk_evento")
     private Evento evento;
+    @Column(name = "extensao", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private Extensao extensao;
 
     public enum TipoDocumento {OUTROS}
+
+    public enum Extensao {PDF, DOCX, DOC, TXT, ODT}
 
     @Override
     public boolean equals(Object o) {

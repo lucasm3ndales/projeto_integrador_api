@@ -59,13 +59,6 @@ public class EventoService {
             throw new IllegalArgumentException("Periodicidade do evento inválida!");
         }
 
-        Tramite.StatusTramite status = null;
-        try{
-            status = Tramite.StatusTramite.valueOf(dto.statusTramite().trim());
-        } catch (IllegalArgumentException ex) {
-            throw new IllegalArgumentException("Status do evento inválido!");
-        }
-
         Endereco endereco = new Endereco(
                 dto.pais().toLowerCase().trim(),
                 dto.estado().toLowerCase().trim(),
@@ -103,7 +96,7 @@ public class EventoService {
             return false;
         }
 
-        boolean res3 = tramiteService.tramitar(evento, servidor, departamento, status, timezone);
+        boolean res3 = tramiteService.tramitar(evento, servidor, departamento, Tramite.StatusTramite.EM_ABERTO, timezone);
         if (!res3) {
             return false;
         }

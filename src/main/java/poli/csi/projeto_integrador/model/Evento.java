@@ -66,8 +66,6 @@ public class Evento {
     @JsonManagedReference
     private Set<DespesaEvento> despesaEventos = new HashSet<>();
 
-    //TODO: Adicionar campo justificativa evento
-
     public enum TipoEvento {OUTROS}
 
     public enum StatusEvento {ACEITO, RECUSADO, PENDENTE}

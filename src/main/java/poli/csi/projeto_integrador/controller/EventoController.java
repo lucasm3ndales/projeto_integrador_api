@@ -65,7 +65,7 @@ public class EventoController {
     ) {
         boolean res = eventoService.tramitarEvento(dto, timezone);
         if(res) {
-            return ResponseEntity.ok(res);
+            return ResponseEntity.ok("Evento trâmitado com sucesso!");
         }
         return ResponseEntity.internalServerError().body("Erro ao tramitar evento!");
     }

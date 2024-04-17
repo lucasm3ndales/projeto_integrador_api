@@ -53,9 +53,7 @@ public record SalvarEventoDto(
         @NotNull(message = "Id do departamento nulo!")
         Long departamentoId,
         @NotNull(message = "Id do servidor nulo!")
-        Long servidorId,
-        @NotBlank(message = "Status do trâmite inválido!")
-        String statusTramite
+        Long servidorId
         
 ) {
     public SalvarEventoDto {

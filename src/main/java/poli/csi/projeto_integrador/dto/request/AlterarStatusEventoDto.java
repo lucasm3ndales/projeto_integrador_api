@@ -5,8 +5,8 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 public record AlterarStatusEventoDto(
-        @NotNull(message = "Id de usuário nulo!")
-        Long usuarioId,
+        @NotNull(message = "Id usuário remetente nulo!")
+        Long origemId,
         @NotNull(message = "Id de evento nulo!")
         Long eventoId,
         @NotBlank(message = "Status do evento inválido!")

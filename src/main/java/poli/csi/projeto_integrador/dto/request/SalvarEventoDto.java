@@ -49,11 +49,14 @@ public record SalvarEventoDto(
         @Valid
         Set<SalvarDocumentoDto> documentos,
         @Valid
-        Set<SalvarDespesaDto> despesas,
+        Set<AdicionarDespesaDto> despesas,
         @NotNull(message = "Id do departamento nulo!")
         Long departamentoId,
         @NotNull(message = "Id do servidor nulo!")
-        Long servidorId
+        Long servidorId,
+        @NotBlank(message = "Status do trâmite inválido!")
+        String statusTramite
+        
 ) {
     public SalvarEventoDto {
         if(complemento != null && complemento.length() > 255) {

@@ -1,5 +1,6 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Despesa {
     @Enumerated(value = EnumType.STRING)
     private TipoDespesa tipo;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<DespesaEvento> despesaEventos = new HashSet<>();
 
     public enum TipoDespesa {OUTROS}

@@ -13,10 +13,19 @@ import java.util.ArrayList;
 @Repository
 public interface ServidorRepository extends JpaRepository<Servidor, Long>, JpaSpecificationExecutor<Servidor> {
 
-    //TODO: Implementar filtros para servidor
     static Specification<Servidor> servidorSpec(FiltroServidor filtro) {
         return (servidor, cq,  cb) -> {
             final ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+
+            if(filtro.nome() != null) {
+                predicates.add(cb.like(cb.lower(servidor.get("nome")), filtro.nome().toLowerCase().trim() + "%"));
+
+            }
+
+            if(filtro.matricula() != null) {
+                predicates.add(cb.like(cb.lower(servidor.get("matricula")), filtro.matricula().toLowerCase().trim() + "%"));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

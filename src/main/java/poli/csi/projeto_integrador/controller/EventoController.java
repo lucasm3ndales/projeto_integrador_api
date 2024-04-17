@@ -11,6 +11,7 @@ import poli.csi.projeto_integrador.dto.filter.FiltroEvento;
 import poli.csi.projeto_integrador.dto.request.AlterarEventoDto;
 import poli.csi.projeto_integrador.dto.request.AlterarStatusEventoDto;
 import poli.csi.projeto_integrador.dto.request.SalvarEventoDto;
+import poli.csi.projeto_integrador.dto.request.TramiteEventoDto;
 import poli.csi.projeto_integrador.dto.response.EventoStatusResDto;
 import poli.csi.projeto_integrador.model.Evento;
 import poli.csi.projeto_integrador.service.EventoService;
@@ -57,6 +58,18 @@ public class EventoController {
         return ResponseEntity.internalServerError().body("Erro ao alterar status do evento!");
     }
 
+    @PutMapping("/tramitar")
+    public ResponseEntity<?> tramitarEvento(
+            @Valid @RequestBody TramiteEventoDto dto,
+            @RequestHeader(value = "timezone") String timezone
+    ) {
+        boolean res = eventoService.tramitarEvento(dto, timezone);
+        if(res) {
+            return ResponseEntity.ok(res);
+        }
+        return ResponseEntity.internalServerError().body("Erro ao tramitar evento!");
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarEvento(
             @PathVariable("id") Long id
@@ -77,10 +90,15 @@ public class EventoController {
             @PathVariable("id") Long id,
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "tipo", required = false) String tipo,
-            @RequestParam(value = "periodicidade", required = false) String periodicidade
+            @RequestParam(value = "periodicidade", required = false) String periodicidade,
+            @RequestParam(value = "dataInicio", required = false) String dataInicio,
+            @RequestParam(value = "dataFim", required = false) String dataFim,
+            @RequestParam(value = "arquivado") Boolean arquivado,
+            @RequestParam(value = "status", required = false) String status
+
     ) {
         if(id != null) {
-            FiltroEvento filtro = new FiltroEvento(nome, tipo, periodicidade);
+            FiltroEvento filtro = new FiltroEvento(nome, tipo, periodicidade, dataInicio, dataFim, arquivado, status);
             Page<Evento> res = eventoService.buscarEventos(id, pageable, filtro);
             if(res.isEmpty()) {
                 return ResponseEntity.notFound().build();

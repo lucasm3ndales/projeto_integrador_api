@@ -16,21 +16,10 @@ import java.time.ZoneId;
 public class TramiteService {
     private final TramiteRepository tramiteRepository;
 
-    public boolean salvarTramite(Evento evento, Usuario origem, Usuario destino, String timezone) {
+    public boolean tramitar(Evento evento, Usuario origem, Usuario destino, Tramite.StatusTramite status, String timezone) {
         Tramite tramite = new Tramite();
-        tramite.setStatus(Tramite.StatusTramite.EM_ABERTO);
-        tramite.setDataTempo(gerarTimestamp(timezone));
-        tramite.setEvento(evento);
-        tramite.setOrigem(origem);
-        tramite.setDestino(destino);
-        tramiteRepository.save(tramite);
-        return true;
-    }
-
-    public boolean retornarTramite(Evento evento, Usuario origem, Usuario destino, String timezone) {
-        Tramite tramite = new Tramite();
-        tramite.setStatus(Tramite.StatusTramite.ENCERRADO);
-        tramite.setDataTempo(gerarTimestamp(timezone));
+        tramite.setStatus(status);
+        tramite.setCriadoEm(gerarTimestamp(timezone));
         tramite.setEvento(evento);
         tramite.setOrigem(origem);
         tramite.setDestino(destino);

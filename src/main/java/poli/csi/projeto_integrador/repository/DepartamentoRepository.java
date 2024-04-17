@@ -11,10 +11,23 @@ import java.util.ArrayList;
 
 public interface DepartamentoRepository extends JpaRepository<Departamento, Long>, JpaSpecificationExecutor<Departamento> {
 
-    //TODO: Implementar filtros para departamento
     static Specification<Departamento> departamentoSpec(FiltroDepartamento filtro) {
         return (departamento, cq,  cb) -> {
             final ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+
+            if(filtro.nome() != null) {
+                predicates.add(cb.like(cb.lower(departamento.get("nome")), filtro.nome().toLowerCase().trim() + "%"));
+
+            }
+
+            if(filtro.responsavel() != null) {
+                predicates.add(cb.like(cb.lower(departamento.get("responsavel")), filtro.responsavel().toLowerCase().trim() + "%"));
+            }
+
+            if(filtro.status() != null) {
+                predicates.add(cb.equal(departamento.get("status"), filtro.status()));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

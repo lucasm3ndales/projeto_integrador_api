@@ -18,8 +18,8 @@ public class Tramite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "data_tempo", nullable = false)
-    private Timestamp dataTempo;
+    @Column(name = "criado_em", nullable = false)
+    private Timestamp criadoEm;
     @Column(name = "status", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private StatusTramite status;

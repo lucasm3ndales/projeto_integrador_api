@@ -28,7 +28,6 @@ public class AuthController {
         return ResponseEntity.badRequest().body("Erro ao autenticar usuário!");
     }
 
-    //TODO: Testar depois
     @PutMapping("/alterar")
     public ResponseEntity<String> alterarLogin(@Valid @RequestBody AlterarLoginDto dto) {
         boolean res = usuarioService.alterarLogin(dto);

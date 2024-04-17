@@ -10,6 +10,8 @@ import java.util.Set;
 public record AlterarEventoDto(
         @NotNull(message = "Id do evento nulo!")
         Long eventoId,
+        @NotNull(message = "Id do usuário nulo!")
+        Long usuarioId,
         @NotBlank(message = "Nome do evento inválido!")
         String nome,
         @NotBlank(message = "Tipo do evento inválido!")
@@ -49,9 +51,9 @@ public record AlterarEventoDto(
         String numero,
         String complemento,
         @Valid
-        Set<AlterarDocumentoDto> documentos,
+        Set<SalvarDocumentoDto> documentos,
         @Valid
-        Set<AlterarDespesaDto> despesas
+        Set<AdicionarDespesaDto> despesas
 ) {
     public AlterarEventoDto {
         if(complemento != null && complemento.length() > 255) {

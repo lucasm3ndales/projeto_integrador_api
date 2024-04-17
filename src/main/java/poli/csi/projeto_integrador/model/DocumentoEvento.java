@@ -1,10 +1,13 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -23,7 +26,13 @@ public class DocumentoEvento {
     @Enumerated(value = EnumType.STRING)
     private TipoDocumento tipo;
     @Column(name = "doc", nullable = false, columnDefinition = "BYTEA")
+    @JsonIgnore
     private byte[] doc;
+    @Column(name = "criado_em", nullable = false)
+    private Timestamp criadoEm;
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario", nullable = false)
+    private Usuario anexadoPor;
     @ManyToOne
     @JoinColumn(name = "fk_evento")
     private Evento evento;

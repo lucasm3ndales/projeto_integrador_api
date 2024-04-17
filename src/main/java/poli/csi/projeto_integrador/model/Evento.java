@@ -1,5 +1,8 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +54,7 @@ public class Evento {
     @Column(name = "arquivado", nullable = false)
     private Boolean arquivado;
     @Column(name = "status", length = 63, nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private StatusEvento status;
     @Embedded
     private Endereco endereco;
@@ -59,11 +63,14 @@ public class Evento {
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private Set<Tramite> tramites = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<DespesaEvento> despesaEventos = new HashSet<>();
+
+    //TODO: Adicionar campo justificativa evento
 
     public enum TipoEvento {OUTROS}
 
-    public enum StatusEvento {ACEITO, RECUSADO, PENDENTE, TRAMITADO}
+    public enum StatusEvento {ACEITO, RECUSADO, PENDENTE}
 
     public enum Periodicidade {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
 

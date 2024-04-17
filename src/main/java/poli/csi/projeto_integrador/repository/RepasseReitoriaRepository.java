@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import poli.csi.projeto_integrador.dto.filter.FiltroRepasseReitoria;
 import poli.csi.projeto_integrador.model.RepasseReitoria;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Repository
@@ -18,10 +19,16 @@ public interface RepasseReitoriaRepository extends JpaRepository<RepasseReitoria
 
     Page<RepasseReitoria> findAllByReitoria_Id(@Param("id") Long id, Pageable pageable);
 
-    //TODO: Implementar filtros para repasse
     static Specification<RepasseReitoria> repasseReitoriaSpec(FiltroRepasseReitoria filtro) {
         return (repasse, cq, cb) -> {
             final ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+
+            if(filtro.dataInicio() != null && filtro.dataFim() != null) {
+                LocalDate dataInicio = LocalDate.parse(filtro.dataFim());
+                LocalDate dataFim = LocalDate.parse(filtro.dataInicio());
+                predicates.add(cb.between(repasse.get("dataInicio"), dataInicio, dataFim));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

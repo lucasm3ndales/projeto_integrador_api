@@ -1,5 +1,7 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,15 +22,19 @@ public class DespesaEvento {
     @Id
     @ManyToOne
     @JoinColumn(name = "fk_evento", nullable = false)
+    @JsonBackReference
     private Evento evento;
     @Id
     @ManyToOne
     @JoinColumn(name = "fk_despesa", nullable = false)
+    @JsonManagedReference
     private Despesa despesa;
     @Column(name = "valor", precision = 12, scale = 2, nullable = false)
     private BigDecimal valor;
-    @Column(name = "data_tempo", nullable = false)
-    private Timestamp dataTempo;
+    @Column(name = "criado_em", nullable = false)
+    private Timestamp criadoEm;
+    @Column(name = "atualizado_em", nullable = false)
+    private Timestamp atualizadoEm;
     @Column(name = "justificativa", length = 500, nullable = false, columnDefinition = "TEXT")
     private String justificativa;
 

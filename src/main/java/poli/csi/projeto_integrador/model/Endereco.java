@@ -1,18 +1,21 @@
 package poli.csi.projeto_integrador.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Embeddable
+@Entity
+@Table(name = "endereco")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Endereco {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "pais", length = 100, nullable = false)
     private String pais;
     @Column(name = "estado", length = 8, nullable = false)

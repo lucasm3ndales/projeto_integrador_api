@@ -1,7 +1,5 @@
 package poli.csi.projeto_integrador.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,10 +54,9 @@ public class Evento {
     @Column(name = "status", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private StatusEvento status;
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_endereco")
     private Endereco endereco;
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<DocumentoEvento> documentos = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private Set<Tramite> tramites = new HashSet<>();
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)

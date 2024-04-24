@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,9 +21,6 @@ public class Tramite {
     private Long id;
     @Column(name = "criado_em", nullable = false)
     private Timestamp criadoEm;
-    @Column(name = "status", length = 63, nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private StatusTramite status;
     @ManyToOne
     @JoinColumn(name = "fk_origem", nullable = false)
     private Usuario origem;
@@ -32,8 +30,8 @@ public class Tramite {
     @ManyToOne
     @JoinColumn(name = "fk_evento")
     private Evento evento;
-
-    public enum StatusTramite {EM_ABERTO, ENCERRADO}
+    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
+    private List<Documento> documentos;
 
     @Override
     public boolean equals(Object o) {

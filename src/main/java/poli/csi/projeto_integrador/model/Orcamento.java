@@ -1,5 +1,6 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,25 +9,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "repasse_reitoria")
+@Table(name = "orcamento")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RepasseReitoria {
+public class Orcamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "repassado_em", nullable = false)
-    private Timestamp dataTempo;
-    @Column(name = "valor", precision = 14, scale = 2, nullable = false)
-    private BigDecimal valor;
-    @ManyToOne
-    @JoinColumn(name = "fk_unidade")
+    @Column(name = "verba", nullable = false)
+    private BigDecimal verba;
+    @Column(name = "saldo", nullable = false)
+    private BigDecimal saldo;
+    @Column(name = "ano", length = 4, nullable = false)
+    private String ano;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
-    private UnidadeAdministrativa reitoria;
-
+    private UnidadeAdministrativa unidade;
 }

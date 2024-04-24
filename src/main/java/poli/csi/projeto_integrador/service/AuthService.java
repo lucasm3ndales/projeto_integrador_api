@@ -27,7 +27,7 @@ public class AuthService {
             AuthResDto res = new AuthResDto(
                     usuario.getId(),
                     usuario.getNome(),
-                    usuario.getStatus(),
+                    usuario.getAtivo(),
                     usuario.getRole().name(),
                     token
             );

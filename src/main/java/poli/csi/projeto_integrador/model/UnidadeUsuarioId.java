@@ -12,21 +12,21 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DespesaEventoId implements Serializable {
-    private Long eventoId;
-    private Long despesaId;
+public class UnidadeUsuarioId implements Serializable {
+    private Long unidadeId;
+    private Long usuarioId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DespesaEventoId that = (DespesaEventoId) o;
-        return Objects.equals(eventoId, that.eventoId) &&
-                Objects.equals(despesaId, that.despesaId);
+        UnidadeUsuarioId that = (UnidadeUsuarioId) o;
+        return Objects.equals(unidadeId, that.unidadeId) &&
+                Objects.equals(usuarioId, that.usuarioId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventoId, despesaId);
+        return Objects.hash(unidadeId, usuarioId);
     }
 }

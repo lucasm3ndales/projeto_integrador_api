@@ -11,12 +11,12 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "documento_evento")
+@Table(name = "documento")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentoEvento {
+public class Documento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,11 +31,8 @@ public class DocumentoEvento {
     @Column(name = "criado_em", nullable = false)
     private Timestamp criadoEm;
     @ManyToOne
-    @JoinColumn(name = "fk_usuario", nullable = false)
-    private Usuario anexadoPor;
-    @ManyToOne
-    @JoinColumn(name = "fk_evento")
-    private Evento evento;
+    @JoinColumn(name = "fk_tramite", nullable = false)
+    private Tramite tramite;
     @Column(name = "extensao", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Extensao extensao;
@@ -49,7 +46,7 @@ public class DocumentoEvento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DocumentoEvento doc = (DocumentoEvento) o;
+        Documento doc = (Documento) o;
         return Objects.equals(id, doc.id);
     }
 

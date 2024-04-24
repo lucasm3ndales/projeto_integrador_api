@@ -13,7 +13,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
-@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,19 +27,21 @@ public class Usuario {
     private String email;
     @Column(name = "telefone", length = 11, nullable = false)
     private String telefone;
-    @Column(name = "status", nullable = false)
-    private Boolean status;
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo;
+    @Column(name = "matricula", length = 7, nullable = false, unique = true)
+    private String matricula;
     @Column(name = "role", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TipoUsuario role;
-    @Column(name = "login", length = 100, nullable = false)
+    @Column(name = "login", length = 100, nullable = false, unique = true)
     @JsonIgnore
     private String login;
     @Column(name = "senha", nullable = false)
     @JsonIgnore
     private String senha;
 
-    public enum TipoUsuario {MASTER, REITORIA, DEPARTAMENTO, SERVIDOR}
+    public enum TipoUsuario {PRO_REITOR, CHEFE_DEPARTAMENTO, SERVIDOR}
 
     @Override
     public boolean equals(Object o) {

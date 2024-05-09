@@ -15,30 +15,30 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tramite {
+public class Procedure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "criado_em", nullable = false)
-    private Timestamp criadoEm;
+    private Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "fk_origem", nullable = false)
-    private Usuario origem;
+    private User origin;
     @ManyToOne
     @JoinColumn(name = "fk_destino", nullable = false)
-    private Usuario destino;
+    private User destiny;
     @ManyToOne
     @JoinColumn(name = "fk_evento")
-    private Evento evento;
-    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
-    private List<Documento> documentos;
+    private Event event;
+    @OneToMany(mappedBy = "procedure", cascade = CascadeType.ALL)
+    private List<Document> documents;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Tramite tramite = (Tramite) o;
+        Procedure tramite = (Procedure) o;
         return Objects.equals(id, tramite.id);
     }
 

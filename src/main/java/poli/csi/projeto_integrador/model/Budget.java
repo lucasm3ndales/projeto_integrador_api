@@ -1,6 +1,5 @@
 package poli.csi.projeto_integrador.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,17 +15,17 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orcamento {
+public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "verba", nullable = false)
-    private BigDecimal verba;
+    private BigDecimal budget;
     @Column(name = "saldo", nullable = false)
-    private BigDecimal saldo;
+    private BigDecimal balance;
     @Column(name = "ano", length = 4, nullable = false)
-    private String ano;
+    private String year;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
-    private UnidadeAdministrativa unidade;
+    private AdmUnity unity;
 }

@@ -16,37 +16,37 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Documento {
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "nome", length = 100, nullable = false)
-    private String nome;
+    private String name;
     @Column(name = "tipo", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private TipoDocumento tipo;
+    private DocumentType type;
     @Column(name = "doc", nullable = false, columnDefinition = "BYTEA")
     @JsonIgnore
     private byte[] doc;
     @Column(name = "criado_em", nullable = false)
-    private Timestamp criadoEm;
+    private Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "fk_tramite", nullable = false)
-    private Tramite tramite;
+    private Procedure procedure;
     @Column(name = "extensao", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Extensao extensao;
+    private Extensions extension;
 
-    public enum TipoDocumento {OUTROS}
+    public enum DocumentType {OUTROS}
 
-    public enum Extensao {PDF, DOCX, DOC, TXT, ODT}
+    public enum Extensions {PDF, DOCX, DOC, TXT, ODT}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Documento doc = (Documento) o;
+        Document doc = (Document) o;
         return Objects.equals(id, doc.id);
     }
 

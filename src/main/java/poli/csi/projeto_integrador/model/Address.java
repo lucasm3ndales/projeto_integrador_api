@@ -12,23 +12,23 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Endereco {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "pais", length = 100, nullable = false)
-    private String pais;
+    private String country;
     @Column(name = "estado", length = 8, nullable = false)
-    private String estado;
+    private String state;
     @Column(name = "cidade", length = 100, nullable = false)
-    private String cidade;
+    private String city;
     @Column(name = "bairro", length = 100, nullable = false)
-    private String bairro;
+    private String district;
     @Column(name = "rua", length = 100, nullable = false)
-    private String rua;
+    private String street;
     @Column(name = "numero", length = 8, nullable = false)
-    private String numero;
+    private String num;
     @Column(name = "complemento")
-    private String complemento;
+    private String complement;
 
 }

@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record AuthReqDto(
-        @NotBlank
+        @NotBlank(message = "Nome de usuário inválido!")
         @Size(min = 3)
-        String login,
-        @NotBlank
+        String username,
+        @NotBlank(message = "Senha inválida!")
         @Size(min = 6)
-        String senha
+        String password
 )
 {}

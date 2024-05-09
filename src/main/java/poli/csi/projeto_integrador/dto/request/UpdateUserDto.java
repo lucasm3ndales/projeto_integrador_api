@@ -6,39 +6,39 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import poli.csi.projeto_integrador.exception.CustomException;
 
-public record UsuarioAlterarDto(
+public record UpdateUserDto(
         @NotNull(message = "Id do usuário nulo!")
         Long id,
         @NotBlank(message = "Nome inválido!")
         @Size(min = 2, message = "Nome muito curto!")
-        String nome,
+        String name,
         @NotBlank(message = "E-mail inválido!")
         @Email(message = "Formato de e-mail inválido!")
         String email,
         @NotBlank(message = "Telefone inválido")
         @Size(max = 11, message = "N° de telefone muito extenso!")
-        String telefone,
-        String login,
-        String senha
+        String phone,
+        String username,
+        String password
 ) {
-    public UsuarioAlterarDto {
-        if(login.compareTo(senha) == 0) {
+    public UpdateUserDto {
+        if(username.compareTo(password) == 0) {
             throw new CustomException("Senha igual ao nome de usuário!");
         }
 
-        if(login != null && login.isBlank()) {
+        if(username != null && username.isBlank()) {
             throw new CustomException("Nome de usuário inválido!");
         }
 
-        if(login != null && login.length() < 3) {
+        if(username != null && username.length() < 3) {
             throw new CustomException("Nome de usuário muito curto!");
         }
 
-        if(senha != null && senha.isBlank()) {
+        if(password != null && password.isBlank()) {
             throw new CustomException("Senha inválida!");
         }
 
-        if(senha != null && senha.length() < 6) {
+        if(password != null && password.length() < 6) {
             throw new CustomException("Senha muito curta!");
         }
     }

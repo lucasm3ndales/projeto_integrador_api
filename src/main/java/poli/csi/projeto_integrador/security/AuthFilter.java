@@ -12,14 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import poli.csi.projeto_integrador.service.TokenService;
-import poli.csi.projeto_integrador.service.UsuarioService;
+import poli.csi.projeto_integrador.service.UserService;
 import java.io.IOException;
 
 @Component
 @AllArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
-    private final UsuarioService usuarioService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain fc) throws ServletException, IOException {
@@ -28,7 +28,7 @@ public class AuthFilter extends OncePerRequestFilter {
             String token = authHeader.replace("Bearer",  "").trim();
             if(token != null) {
                 String subject = tokenService.getSubject(token);
-                UserDetails userDetails = usuarioService.loadUserByUsername(subject);
+                UserDetails userDetails = userService.loadUserByUsername(subject);
                 UsernamePasswordAuthenticationToken authenticationJwt = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );

@@ -6,29 +6,28 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "unidade_administrativa")
+@Table(name = "despesa")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UnidadeAdministrativa {
+public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nome", nullable = false)
-    private String nome;
+    @Column(name = "nome", length = 100, nullable = false, unique = true)
+    private String name;
     @Column(name = "tipo", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private TipoUA tipo;
-    @OneToMany(mappedBy = "unidade", cascade = CascadeType.ALL)
+    private ExpenseType type;
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonBackReference
-    private Set<Orcamento> orcamentos;
+    private Set<EventExpense> eventExpense = new HashSet<>();
 
-    public enum TipoUA {
-        REITORIA,
-        DEPARTAMENTO
-    }
+    public enum ExpenseType {OUTROS}
 }

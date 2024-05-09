@@ -11,25 +11,25 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "repasse_departamento")
+@Table(name = "repasse")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RepasseDepartamento {
+public class PassedOn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "repassado_em", nullable = false)
-    private Timestamp dataTempo;
+    private Timestamp timestamp;
     @Column(name = "valor", precision = 14, scale = 2, nullable = false)
-    private BigDecimal valor;
+    private BigDecimal value;
     @ManyToOne
-    @JoinColumn(name = "fk_reitoria")
+    @JoinColumn(name = "fk_origem")
     @JsonManagedReference
-    private Reitoria reitoria;
+    private AdmUnity origin;
     @ManyToOne
-    @JoinColumn(name = "fk_departamento")
+    @JoinColumn(name = "fk_destino")
     @JsonManagedReference
-    private Departamento departamento;
+    private AdmUnity destiny;
 }

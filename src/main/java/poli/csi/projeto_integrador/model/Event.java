@@ -19,62 +19,62 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Evento {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "nome", length = 125, nullable = false)
-    private String nome;
+    private String name;
     @Column(name = "tipo", length = 63, nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipoEvento tipo;
+    private EventType type;
     @Column(name = "periodicidade", length = 63, nullable = false)
     @Enumerated(EnumType.STRING)
-    private Periodicidade periodicidade;
+    private Periodicity periodicity;
     @Column(name = "data_inicio", nullable = false)
-    private LocalDate dataInicio;
+    private LocalDate startDate;
     @Column(name = "data_fim", nullable = false)
-    private LocalDate dataFim;
+    private LocalDate endDate;
     @Column(name = "data_ida", nullable = false)
-    private LocalDate dataIda;
+    private LocalDate departureDate;
     @Column(name = "data_volta", nullable = false)
-    private LocalDate dataVolta;
+    private LocalDate backDate;
     @Column(name = "objetivo", length = 500, nullable = false, columnDefinition = "TEXT")
-    private String objetivo;
+    private String goal;
     @Column(name = "participantes", nullable = false)
-    private Integer participantes;
+    private Integer participants;
     @Column(name = "custo", precision = 12, scale = 2, nullable = false)
-    private BigDecimal custo;
+    private BigDecimal cost;
     @Column(name = "aporte_dep", precision = 12, scale = 2, nullable = false)
-    private BigDecimal aporteDep;
+    private BigDecimal contributionDep;
     @Column(name = "aporte_reit", precision = 12, scale = 2, nullable = false)
-    private BigDecimal aporteReit;
+    private BigDecimal contributionReit;
     @Column(name = "arquivado", nullable = false)
-    private Boolean arquivado;
+    private Boolean archived;
     @Column(name = "status", length = 63, nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private StatusEvento status;
+    private EventStatus status;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_endereco")
-    private Endereco endereco;
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<Tramite> tramites = new HashSet<>();
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    private Address address;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<Procedure> procedures = new HashSet<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Set<DespesaEvento> despesaEventos = new HashSet<>();
+    private Set<EventExpense> eventExpense = new HashSet<>();
 
-    public enum TipoEvento {OUTROS}
+    public enum EventType {OUTROS}
 
-    public enum StatusEvento {ACEITO, RECUSADO, PENDENTE}
+    public enum EventStatus {ACEITO, RECUSADO, PENDENTE}
 
-    public enum Periodicidade {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
+    public enum Periodicity {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Evento evento = (Evento) o;
+        Event evento = (Event) o;
         return Objects.equals(id, evento.id);
     }
 

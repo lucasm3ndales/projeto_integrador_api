@@ -14,21 +14,23 @@ import poli.csi.projeto_integrador.dto.request.EventStatusDto;
 import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.Address;
 import poli.csi.projeto_integrador.model.Event;
+import poli.csi.projeto_integrador.model.Procedure;
 import poli.csi.projeto_integrador.model.User;
 import poli.csi.projeto_integrador.repository.EventRepository;
 import poli.csi.projeto_integrador.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 
 @Service
 @AllArgsConstructor
 public class EventService {
-    EventRepository eventRepository;
-    ProcedureService procedureService;
-    ExpenseService expenseService;
-    UserRepository userRepository;
-    BudgetService budgetService;
+    private final EventRepository eventRepository;
+    private final ProcedureService procedureService;
+    private final ExpenseService expenseService;
+    private final UserRepository userRepository;
+    private final BudgetService budgetService;
 
     @Transactional
     public boolean saveEvent(EventDto dto, String timezone) {
@@ -102,6 +104,17 @@ public class EventService {
 
     @Transactional
     public boolean updateEventStatus(EventStatusDto dto, String timezone) {
+        Event event = eventRepository.findById(dto.idEvent())
+                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+        User user = userRepository.findById(dto.idUser())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
+
+        Procedure procedure = getLastProcedure(event);
+
+        if(!procedure.getDestiny().equals(user)) {
+            throw new CustomException("Usuário não autorizado a realizar modificações!");
+        }
+
         Event.EventStatus status = null;
 
         try {
@@ -110,14 +123,8 @@ public class EventService {
             throw new IllegalArgumentException("Status do evento inválido!");
         }
 
-        Event event = eventRepository.findById(dto.idEvent())
-                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
-
-        User user = userRepository.findById(dto.idUser())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
-
-
         if (event.getStatus() == Event.EventStatus.PENDENTE && status != Event.EventStatus.PENDENTE && user.getRole() != User.UserType.SERVIDOR) {
+
 
             if (status == Event.EventStatus.ACEITO) {
                 if (validateCosts(event)) {
@@ -165,6 +172,12 @@ public class EventService {
         Event event = eventRepository.findById(dto.idEvent())
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
 
+        Procedure procedure = getLastProcedure(event);
+
+        if(!procedure.getDestiny().equals(user)) {
+            throw new CustomException("Usuário não autorizado a realizar modificações!");
+        }
+
         if (event.getStatus() == Event.EventStatus.PENDENTE && user.getRole() != User.UserType.SERVIDOR) {
 
             BigDecimal value = event.getContributionDep().add(event.getContributionReit()).add(dto.contribution());
@@ -183,6 +196,12 @@ public class EventService {
         }
 
         return true;
+    }
+
+    private Procedure getLastProcedure(Event event) {
+        return event.getProcedures().stream()
+                .max(Comparator.comparing(Procedure::getCreatedAt))
+                .orElseThrow(() -> new EntityNotFoundException("Não há trâmites ligados ao evento!"));
     }
 
     public Event getEvent(Long idEvent) {

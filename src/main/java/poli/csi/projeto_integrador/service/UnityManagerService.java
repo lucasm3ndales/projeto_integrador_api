@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @Service
 @AllArgsConstructor
 public class UnityManagerService {
-    UnityManagerRepository unityManagerRepository;
+    private final UnityManagerRepository unityManagerRepository;
 
     public boolean saveUniteManager(User user, AdmUnity unity, String timezone) {
         UnityManager manager = UnityManager.builder()

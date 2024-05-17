@@ -17,6 +17,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UserService userService;
+
     public AuthResDto authUsuario(AuthReqDto req) throws AuthenticationException {
         try {
             Authentication credentials = new UsernamePasswordAuthenticationToken(req.username().trim(), req.password().trim());

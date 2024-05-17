@@ -16,7 +16,7 @@ import java.util.Comparator;
 @Service
 @AllArgsConstructor
 public class BudgetService {
-    BudgetRepository budgetRepository;
+    private final BudgetRepository budgetRepository;
 
     public boolean decrementBudget(User destiny, Event event) {
         Procedure procedure = getLastProcedure(event);

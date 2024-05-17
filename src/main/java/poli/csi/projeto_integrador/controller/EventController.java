@@ -19,7 +19,7 @@ import poli.csi.projeto_integrador.service.EventService;
 @AllArgsConstructor
 @RequestMapping("/event")
 public class EventController {
-    public EventService eventService;
+    private final EventService eventService;
 
     @PostMapping("/save")
     public ResponseEntity<String> saveEvent(@Valid @RequestBody EventDto dto, @RequestHeader("timezone") String timezone) {

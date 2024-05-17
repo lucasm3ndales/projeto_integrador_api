@@ -19,9 +19,9 @@ import poli.csi.projeto_integrador.repository.UserRepository;
 @Service
 @AllArgsConstructor
 public class AdmUnityService {
-    AdmUnityRepository admUnityRepository;
-    UserRepository userRepository;
-    UnityManagerService unityManagerService;
+    private final AdmUnityRepository admUnityRepository;
+    private final UserRepository userRepository;
+    private final UnityManagerService unityManagerService;
 
     @Transactional
     public boolean save(SaveUnityDto dto, String timezone) {

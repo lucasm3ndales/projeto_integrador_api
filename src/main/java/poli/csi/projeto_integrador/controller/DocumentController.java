@@ -17,7 +17,7 @@ import poli.csi.projeto_integrador.service.DocumentService;
 @RequestMapping("/document")
 @AllArgsConstructor
 public class DocumentController {
-    DocumentService documentService;
+    private final DocumentService documentService;
 
 
     @GetMapping("/download/{id}")

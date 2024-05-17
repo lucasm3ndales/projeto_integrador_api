@@ -3,7 +3,6 @@ package poli.csi.projeto_integrador.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import poli.csi.projeto_integrador.dto.request.DocumentDto;
 import poli.csi.projeto_integrador.model.Document;
 import poli.csi.projeto_integrador.model.Procedure;
@@ -21,7 +20,7 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class DocumentService {
-    DocumentRepository documentRepository;
+    private final DocumentRepository documentRepository;
 
     public boolean addDocumentsToProcedure(List<DocumentDto> docs, Procedure procedure, String timezone) {
         Set<Document> documents = new HashSet<>();

@@ -17,7 +17,7 @@ import poli.csi.projeto_integrador.service.AdmUnityService;
 @AllArgsConstructor
 @RequestMapping("/unity")
 public class AdmUnityController {
-    AdmUnityService admUnityService;
+    private final AdmUnityService admUnityService;
 
     @PostMapping("/save")
     public ResponseEntity<String> saveUnity(@Valid @RequestBody SaveUnityDto dto, @RequestHeader("timezone") String timezone) {

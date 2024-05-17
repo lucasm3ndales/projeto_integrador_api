@@ -1,10 +1,7 @@
 package poli.csi.projeto_integrador.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "endereco")
@@ -12,6 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +24,7 @@ public class Address {
     private String district;
     @Column(name = "rua", length = 100, nullable = false)
     private String street;
-    @Column(name = "numero", length = 8, nullable = false)
+    @Column(name = "numero", length = 8)
     private String num;
     @Column(name = "complemento")
     private String complement;

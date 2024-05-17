@@ -2,12 +2,10 @@ package poli.csi.projeto_integrador.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -15,6 +13,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +37,8 @@ public class User {
     @Column(name = "senha", nullable = false)
     @JsonIgnore
     private String password;
+    @OneToMany(mappedBy = "user")
+    private Set<UnityManager> unityManagers;
 
     public enum UserType {PRO_REITOR, CHEFE_DEPARTAMENTO, SERVIDOR}
 

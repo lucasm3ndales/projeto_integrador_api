@@ -2,10 +2,8 @@ package poli.csi.projeto_integrador.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.Set;
 
 @Entity
@@ -14,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AdmUnity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,8 @@ public class AdmUnity {
     @OneToMany(mappedBy = "unity", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<Budget> budgets;
+    @OneToMany(mappedBy = "unity")
+    private Set<UnityManager> unityManagers;
 
     public enum UnityType {
         REITORIA,

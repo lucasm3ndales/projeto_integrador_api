@@ -3,10 +3,7 @@ package poli.csi.projeto_integrador.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,15 +16,16 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EventExpense {
     @EmbeddedId
     private EventExpenseId id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("idEvent")
     @JoinColumn(name = "fk_evento", nullable = false)
     @JsonBackReference
     private Event event;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("idExpense")
     @JoinColumn(name = "fk_despesa", nullable = false)
     @JsonManagedReference

@@ -62,7 +62,11 @@ public class UserController {
             @RequestParam(value = "role", required = false) String role,
             @RequestParam(value = "active", required = false) Boolean active
     ) {
-        FilterUser filter = new FilterUser(search, role, active);
+        FilterUser filter = FilterUser.builder()
+                .active(active)
+                .role(role)
+                .search(search)
+                .build();
         Page<User> res = userService.getUsers(pageable, filter);
         if (res != null) {
             return ResponseEntity.ok(res);

@@ -52,7 +52,10 @@ public class ExpenseController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "type", required = false) String type
     ) {
-        FilterExpense filter = new FilterExpense(name, type);
+        FilterExpense filter = FilterExpense.builder()
+                .name(name)
+                .type(type)
+                .build();
         Page<Expense> res = expenseService.getExpenses(pageable, filter);
         if(res != null) {
             return ResponseEntity.ok(res);

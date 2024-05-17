@@ -60,7 +60,7 @@ CREATE TABLE endereco
     cidade      VARCHAR(100) NOT NULL,
     bairro      VARCHAR(100) NOT NULL,
     rua         VARCHAR(100) NOT NULL,
-    numero      VARCHAR(8)   NOT NULL,
+    numero      VARCHAR(8),
     complemento VARCHAR(255)
 );
 

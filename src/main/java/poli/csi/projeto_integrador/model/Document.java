@@ -2,11 +2,15 @@ package poli.csi.projeto_integrador.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -16,6 +20,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +38,7 @@ public class Document {
     @ManyToOne
     @JoinColumn(name = "fk_tramite", nullable = false)
     private Procedure procedure;
-    @Column(name = "extensao", nullable = false)
+    @Column(name = "extensao", length = 5, nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Extensions extension;
 
@@ -54,4 +59,5 @@ public class Document {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

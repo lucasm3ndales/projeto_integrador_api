@@ -24,11 +24,11 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
             List<Predicate> predicates = new ArrayList<>();
 
             if (filter.search() != null && !filter.search().isEmpty()) {
-                predicates.add(cb.or(cb.equal(user.get("name"), filter.search()), cb.equal(user.get("siape"), filter.search())));
+                predicates.add(cb.or(cb.like(user.get("name"), filter.search() + "%"), cb.like(user.get("siape"), filter.search() + "%")));
             }
 
             if (filter.role() != null && !filter.role().isEmpty()) {
-                predicates.add(cb.equal(user.get("role"), filter.role()));
+                predicates.add(cb.equal(cb.upper(user.get("role")), filter.role().toUpperCase()));
             }
 
             if (filter.active() != null) {

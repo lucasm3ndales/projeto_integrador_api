@@ -1,10 +1,7 @@
 package poli.csi.projeto_integrador.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -16,14 +13,15 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UnityManager {
     @EmbeddedId
     private UnityManagerId id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_usuario")
     @MapsId("idUser")
     private User user;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_unidade")
     @MapsId("idUnity")
     private AdmUnity unity;

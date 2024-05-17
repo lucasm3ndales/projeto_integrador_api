@@ -24,13 +24,13 @@ public class AuthService {
             UserDetails userDetails = userService.loadUserByUsername(auth.getName());
             User user = userService.getUserByUsername(auth.getName());
             String token = tokenService.createToken(userDetails);
-            AuthResDto res = new AuthResDto(
-                    user.getId(),
-                    user.getName(),
-                    user.getActive(),
-                    user.getRole().name(),
-                    token
-            );
+            AuthResDto res = AuthResDto.builder()
+                    .id(user.getId())
+                    .name(user.getName())
+                    .active(user.getActive())
+                    .role(user.getRole().name())
+                    .token(token)
+                    .build();
             return res;
         } catch (AuthenticationException ex) {
             throw ex;

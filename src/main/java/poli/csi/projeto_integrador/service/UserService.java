@@ -53,19 +53,19 @@ public class UserService implements UserDetailsService {
             throw new CustomException("E-mail ou Nome de usuário já em uso no sistema!");
         }
 
-
-        User user = new User();
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String pass = bcrypt.encode(dto.password().trim());
 
-        user.setName(dto.name().toLowerCase().trim());
-        user.setEmail(dto.email().trim());
-        user.setPhone(dto.phone().trim());
-        user.setUsername(dto.username().trim());
-        user.setPassword(pass);
-        user.setSiape(dto.siape().trim());
-        user.setActive(true);
-        user.setRole(User.UserType.SERVIDOR);
+        User user = User.builder()
+                .name(dto.name().toLowerCase().trim())
+                .email(dto.email().trim())
+                .phone(dto.phone().trim())
+                .username(dto.username().trim())
+                .password(pass)
+                .siape(dto.siape().trim())
+                .active(true)
+                .role(User.UserType.SERVIDOR)
+                .build();
 
         userRepository.save(user);
         return true;

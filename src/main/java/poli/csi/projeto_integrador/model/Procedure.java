@@ -1,10 +1,8 @@
 package poli.csi.projeto_integrador.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +13,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Procedure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

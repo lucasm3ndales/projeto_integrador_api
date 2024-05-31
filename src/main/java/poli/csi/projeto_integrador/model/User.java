@@ -1,6 +1,8 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +40,7 @@ public class User {
     @JsonIgnore
     private String password;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private Set<UnityManager> unityManagers;
 
     public enum UserType {PRO_REITOR, CHEFE_DEPARTAMENTO, SERVIDOR}

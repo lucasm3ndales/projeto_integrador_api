@@ -1,6 +1,7 @@
 package poli.csi.projeto_integrador.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class AdmUnity {
     @JsonBackReference
     private Set<Budget> budgets;
     @OneToMany(mappedBy = "unity")
+    @JsonManagedReference
     private Set<UnityManager> unityManagers;
 
     public enum UnityType {

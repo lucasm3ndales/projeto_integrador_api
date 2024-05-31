@@ -48,9 +48,9 @@ public class AdmUnityController {
 
     @GetMapping("/unities")
     public ResponseEntity<Page<AdmUnity>> getUnities(
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @PageableDefault(page = 0, size = 200) Pageable pageable,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "type") String type,
             @RequestParam(value = "manager", required = false) String manager
 
     ) {

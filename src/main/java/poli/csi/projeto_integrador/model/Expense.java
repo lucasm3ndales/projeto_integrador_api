@@ -27,5 +27,5 @@ public class Expense {
     @JsonBackReference
     private Set<EventExpense> eventExpense = new HashSet<>();
 
-    public enum ExpenseType {OUTROS}
+    public enum ExpenseType {OUTROS, TRANSPORTE, ALIMENTACAO,  HOSPEDAGEM, INGRESSOS}
 }

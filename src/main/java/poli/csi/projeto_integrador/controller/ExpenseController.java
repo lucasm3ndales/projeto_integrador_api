@@ -48,7 +48,7 @@ public class ExpenseController {
 
     @GetMapping("/expenses")
     public ResponseEntity<Page<Expense>> getExpenses(
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @PageableDefault(page = 0, size = 200) Pageable pageable,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "type", required = false) String type
     ) {

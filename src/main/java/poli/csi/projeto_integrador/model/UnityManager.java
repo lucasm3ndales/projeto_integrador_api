@@ -1,5 +1,7 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +22,12 @@ public class UnityManager {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_usuario")
     @MapsId("idUser")
+    @JsonBackReference
     private User user;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_unidade")
     @MapsId("idUnity")
+    @JsonBackReference
     private AdmUnity unity;
     @Column(name = "assumiu_em", nullable = false)
     private Timestamp startedOn;

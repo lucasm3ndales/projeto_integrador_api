@@ -46,6 +46,7 @@ public class ProcedureService {
         return true;
     }
 
+    @Transactional
     public boolean process(Long o, Long d, List<DocumentDto> documents, Event event, String timezone) {
         User origin = userRepository.findById(o).orElseThrow(() -> new EntityNotFoundException("Usuário origem não encontrado!"));
         User destiny = userRepository.findById(d).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
@@ -57,6 +58,8 @@ public class ProcedureService {
                 .event(event)
                 .build();
 
+        procedureRepository.save(procedure);
+
         if(!documents.isEmpty()) {
             boolean resDocuments = documentService.addDocumentsToProcedure(documents, procedure, timezone);
             if(!resDocuments) {
@@ -64,7 +67,6 @@ public class ProcedureService {
             }
         }
 
-        procedureRepository.save(procedure);
         return true;
     }
 

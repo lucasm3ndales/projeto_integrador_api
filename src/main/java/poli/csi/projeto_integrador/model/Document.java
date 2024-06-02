@@ -42,7 +42,7 @@ public class Document {
     @Enumerated(value = EnumType.STRING)
     private Extensions extension;
 
-    public enum DocumentType {OUTROS}
+    public enum DocumentType {OUTROS, CONTRATO, ALVARA}
 
     public enum Extensions {PDF, DOCX, DOC, TXT, ODT}
 

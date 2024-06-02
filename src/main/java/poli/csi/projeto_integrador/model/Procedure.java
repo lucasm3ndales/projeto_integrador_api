@@ -18,7 +18,7 @@ public class Procedure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "criado_em", nullable = false)
+    @Column(name = "tramitado_em", nullable = false)
     private Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "fk_origem", nullable = false)

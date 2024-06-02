@@ -121,6 +121,7 @@ CREATE TABLE despesa
 
 CREATE TABLE despesa_evento
 (
+    id BIGSERIAL PRIMARY KEY,
     fk_despesa    BIGINT         NOT NULL,
     fk_evento     BIGINT         NOT NULL,
     valor         DECIMAL(12, 2) NOT NULL,
@@ -128,7 +129,6 @@ CREATE TABLE despesa_evento
     atualizado_em TIMESTAMP,
     justificativa TEXT,
 
-    CONSTRAINT pk_despesa_evento PRIMARY KEY (fk_evento, fk_despesa),
     FOREIGN KEY (fk_despesa) REFERENCES despesa (id),
     FOREIGN KEY (fk_evento) REFERENCES evento (id)
 );

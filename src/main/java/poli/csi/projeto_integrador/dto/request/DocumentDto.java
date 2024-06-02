@@ -4,5 +4,5 @@ public record DocumentDto(
         String name,
         String type,
         String extension,
-        byte[] document
+        String document
 ) {}

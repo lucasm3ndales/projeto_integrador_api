@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -99,6 +100,7 @@ public class ExpenseService {
     }
 
 
+    @Transactional
     public boolean addExpensesToEvent(Event event, List<EventExpenseDto> eventExpenses, String timezone) {
         eventExpenses.forEach(i -> {
             Expense expense = expenseRepository.findById(i.idExpense()).orElseThrow(() -> new EntityNotFoundException("Despesa não encontrada!"));
@@ -112,6 +114,7 @@ public class ExpenseService {
                     .build();
 
             event.getEventExpense().add(eventExpense);
+            expenseRepository.save(expense);
 
         });
         return true;

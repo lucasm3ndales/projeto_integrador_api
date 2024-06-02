@@ -34,8 +34,8 @@ public record EventDto(
         @NotNull(message = "Número de participantes inválidos!")
         Integer participants,
         @NotNull(message = "Custo do evento inválido!")
-        @Min(0)
-        @Positive
+        @Min(value = 0, message = "Custo do evento inválido!")
+        @Positive(message = "Custo do evento inválido!")
         BigDecimal cost,
         @Valid
         AddressDto address,

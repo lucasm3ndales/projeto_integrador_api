@@ -1,6 +1,7 @@
 package poli.csi.projeto_integrador.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import poli.csi.projeto_integrador.dto.request.DocumentDto;
@@ -13,15 +14,14 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class DocumentService {
     private final DocumentRepository documentRepository;
 
+    @Transactional
     public boolean addDocumentsToProcedure(List<DocumentDto> docs, Procedure procedure, String timezone) {
         Set<Document> documents = new HashSet<>();
         docs.forEach(d -> {
@@ -35,16 +35,29 @@ public class DocumentService {
                 throw new IllegalArgumentException("Tipo ou extensão de documento inválida!");
             }
 
-            Document doc = Document.builder()
-                    .name(d.name())
-                    .type(type)
-                    .extension(extension)
-                    .createdAt(generateTimestamp(timezone))
-                    .doc(d.document())
-                    .procedure(procedure)
-                    .build();
+            try {
 
-            documents.add(doc);
+                if(d.document().contains("base64,")){
+                    String content = d.document().split("base64,")[1];
+
+                    byte[] docContent = Base64.getDecoder().decode(content);
+
+                    Document doc = Document.builder()
+                            .name(d.name())
+                            .type(type)
+                            .extension(extension)
+                            .createdAt(generateTimestamp(timezone))
+                            .doc(docContent)
+                            .procedure(procedure)
+                            .build();
+
+                            documents.add(doc);
+
+                            documentRepository.save(doc);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Erro ao decodificar documento!");
+            }
         });
 
         documentRepository.saveAll(documents);

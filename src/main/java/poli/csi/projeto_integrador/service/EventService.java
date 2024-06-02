@@ -22,6 +22,7 @@ import poli.csi.projeto_integrador.repository.UserRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashSet;
 
 @Service
 @AllArgsConstructor
@@ -44,10 +45,10 @@ public class EventService {
             throw new IllegalArgumentException("Tipo ou periodicidade do evento inválidas!");
         }
 
-        if (!validateDates(dto.startDate(), dto.endDate())
-                || !validateDates(dto.startDate(), dto.departureDate())
-                || !validateDates(dto.departureDate(), dto.endDate())
-                || !validateDates(dto.backDate(), dto.endDate())
+        if (validateDates(dto.startDate(), dto.endDate())
+                || validateDates(dto.startDate(), dto.departureDate())
+                || validateDates(dto.departureDate(), dto.endDate())
+                || validateDates(dto.backDate(), dto.endDate())
         ) {
             throw new CustomException("Datas para cadastro inválidas!");
         }
@@ -78,17 +79,21 @@ public class EventService {
                 .contributionReit(BigDecimal.ZERO)
                 .status(Event.EventStatus.PENDENTE)
                 .archived(false)
+                .eventExpense(new HashSet<>())
                 .build();
 
-        boolean resProcedure = procedureService.process(dto.origin(), dto.destiny(), dto.documents(), event, timezone);
+        eventRepository.save(event);
 
-        if (!resProcedure) {
-            return false;
-        }
 
         boolean resExpense = expenseService.addExpensesToEvent(event, dto.eventExpenses(), timezone);
 
         if (!resExpense) {
+            return false;
+        }
+
+        boolean resProcedure = procedureService.process(dto.origin(), dto.destiny(), dto.documents(), event, timezone);
+
+        if (!resProcedure) {
             return false;
         }
 

@@ -63,7 +63,8 @@ public class SecurityConfig {
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT,
-                HttpHeaders.ORIGIN
+                HttpHeaders.ORIGIN,
+                "timezone"
         ));
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),

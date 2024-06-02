@@ -39,7 +39,7 @@ public class Event {
     private LocalDate backDate;
     @Column(name = "objetivo", length = 500, nullable = false, columnDefinition = "TEXT")
     private String goal;
-    @Column(name = "participantes", nullable = false)
+    @Column(name = "n_participantes", nullable = false)
     private Integer participants;
     @Column(name = "custo", precision = 12, scale = 2, nullable = false)
     private BigDecimal cost;
@@ -61,7 +61,7 @@ public class Event {
     @JsonManagedReference
     private Set<EventExpense> eventExpense = new HashSet<>();
 
-    public enum EventType {OUTROS}
+    public enum EventType {OUTROS, TECNOLOGIA, SIMPOSIO, CONGRESSO, EXPOFEIRA, FEIRA_LIVRE}
 
     public enum EventStatus {ACEITO, RECUSADO, PENDENTE}
 

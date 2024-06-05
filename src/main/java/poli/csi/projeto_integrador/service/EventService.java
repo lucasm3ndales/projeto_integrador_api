@@ -224,10 +224,10 @@ public class EventService {
     }
 
     private boolean isFilter(FilterEvent e) {
-        return e.name() != null && e.name().length() > 0
-                || e.periodicity() != null && e.periodicity().length() > 0
-                || e.status() != null && e.status().length() > 0
-                || e.startDate() != null && e.startDate().length() > 0
-                || e.endDate() != null && e.endDate().length() > 0;
+        return e.name() != null && !e.name().isBlank()
+                || e.periodicity() != null && !e.periodicity().isBlank()
+                || e.status() != null && !e.status().isBlank()
+                || e.startDate() != null && !e.startDate().isBlank()
+                || e.endDate() != null && !e.endDate().isBlank();
     }
 }

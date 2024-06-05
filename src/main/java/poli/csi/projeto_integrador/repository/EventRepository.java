@@ -19,7 +19,12 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
 
-    @Query("SELECT DISTINCT e FROM Event e JOIN e.procedures p WHERE p.origin = :id OR p.destiny = :id AND e.archived = :archived")
+    @Query("SELECT DISTINCT e FROM Event e JOIN e.procedures p " +
+            "JOIN p.origin o " +
+            "JOIN p.destiny d " +
+            "WHERE o.id = :id " +
+            "OR d.id = :id " +
+            "AND e.archived = :archived")
     Page<Event> findEventsByUser(Long id, Boolean archived, Pageable pageable);
 
     static Specification<Event> specEvent(FilterEvent filter, Long idUser) {

@@ -20,11 +20,11 @@ CREATE TABLE unidade_administrativa
 
 CREATE TABLE gestor_unidade
 (
+    id BIGSERIAL PRIMARY KEY,
     fk_usuario BIGINT    NOT NULL,
     fk_unidade BIGINT    NOT NULL,
     assumiu_em TIMESTAMP NOT NULL,
 
-    CONSTRAINT pk_usuario_unidade PRIMARY KEY (fk_usuario, fk_unidade),
     FOREIGN KEY (fk_unidade) REFERENCES unidade_administrativa (id),
     FOREIGN KEY (fk_usuario) REFERENCES usuario (id)
 );

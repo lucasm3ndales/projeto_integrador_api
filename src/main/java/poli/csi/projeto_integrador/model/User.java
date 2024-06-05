@@ -42,6 +42,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private Set<UnityManager> unityManagers;
+    @OneToMany()
+    @JsonBackReference
+    private Set<Procedure> procedures;
 
     public enum UserType {PRO_REITOR, CHEFE_DEPARTAMENTO, SERVIDOR}
 

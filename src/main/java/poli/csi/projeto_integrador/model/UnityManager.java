@@ -17,16 +17,15 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 public class UnityManager {
-    @EmbeddedId
-    private UnityManagerId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_usuario")
-    @MapsId("idUser")
     @JsonBackReference
     private User user;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_unidade")
-    @MapsId("idUnity")
     @JsonBackReference
     private AdmUnity unity;
     @Column(name = "assumiu_em", nullable = false)
@@ -44,33 +43,5 @@ public class UnityManager {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Embeddable
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class UnityManagerId implements Serializable {
-
-        @Column(name = "fk_usuario")
-        private Long idUser;
-
-        @Column(name = "fk_unidade")
-        private Long idUnity;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            UnityManagerId that = (UnityManagerId) o;
-            return Objects.equals(idUnity, that.idUnity) &&
-                    Objects.equals(idUser, that.idUser);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(idUnity, idUser);
-        }
     }
 }

@@ -1,5 +1,6 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -56,6 +57,7 @@ public class Event {
     @JoinColumn(name = "fk_endereco")
     private Address address;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Procedure> procedures = new HashSet<>();
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -65,7 +67,7 @@ public class Event {
 
     public enum EventStatus {ACEITO, RECUSADO, PENDENTE}
 
-    public enum Periodicity {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE}
+    public enum Periodicity {ANUALMENTE, SEMESTRALMENTE, TRIMESTRALMENTE, SEMANALMENTE, MENSALMENTE}
 
     @Override
     public boolean equals(Object o) {

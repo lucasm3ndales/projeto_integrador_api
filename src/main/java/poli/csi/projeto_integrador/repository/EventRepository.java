@@ -22,8 +22,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     @Query("SELECT DISTINCT e FROM Event e JOIN e.procedures p " +
             "JOIN p.origin o " +
             "JOIN p.destiny d " +
-            "WHERE o.id = :id " +
-            "OR d.id = :id " +
+            "WHERE (o.id = :id OR d.id = :id) " +
             "AND e.archived = :archived")
     Page<Event> findEventsByUser(Long id, Boolean archived, Pageable pageable);
 
@@ -33,13 +32,17 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 
             if(idUser != null) {
                 Join<Event, Procedure> procedureJoin = event.join("procedures");
-                Predicate originPredicate = cb.equal(procedureJoin.get("origin"), idUser);
-                Predicate destinyPredicate = cb.equal(procedureJoin.get("destiny"), idUser);
+                Predicate originPredicate = cb.equal(procedureJoin.get("origin").get("id"), idUser);
+                Predicate destinyPredicate = cb.equal(procedureJoin.get("destiny").get("id"), idUser);
                 predicates.add(cb.or(originPredicate, destinyPredicate));
             }
 
             if (filter.name() != null && !filter.name().isEmpty()) {
                 predicates.add(cb.like(cb.lower(event.get("name")), filter.name().toLowerCase() + "%"));
+            }
+
+            if (filter.type() != null && !filter.type().isEmpty()) {
+                predicates.add(cb.equal(cb.upper(event.get("type")), filter.type().toUpperCase()));
             }
 
             if (filter.periodicity() != null && !filter.periodicity().isEmpty()) {

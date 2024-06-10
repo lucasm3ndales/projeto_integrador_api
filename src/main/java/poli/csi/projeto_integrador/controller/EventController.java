@@ -65,6 +65,7 @@ public class EventController {
             @NotNull(message = "Id de usuário inválido!") @PathVariable("id") Long idUser,
             @PageableDefault(page = 0, size = 10) Pageable pageable,
             @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "periodicity", required = false) String periodicity,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "endDate", required = false) String endDate,
@@ -76,15 +77,12 @@ public class EventController {
                 .periodicity(periodicity)
                 .archived(archived)
                 .status(status)
+                .type(type)
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
 
         Page<Event> events = eventService.getAllEvents(filter, pageable, idUser);
-
-        if(events.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(events);
     }
 

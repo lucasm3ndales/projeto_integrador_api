@@ -6,6 +6,7 @@ import lombok.Builder;
 public record FilterEvent(
         String name,
         String periodicity,
+        String type,
         String status,
         String startDate,
         String endDate,

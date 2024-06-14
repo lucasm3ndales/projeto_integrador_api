@@ -13,11 +13,15 @@ import poli.csi.projeto_integrador.dto.filter.FilterEvent;
 import poli.csi.projeto_integrador.model.Event;
 import poli.csi.projeto_integrador.model.Procedure;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Query("SELECT DISTINCT e FROM Event e JOIN e.procedures p " +
             "JOIN p.origin o " +
@@ -56,8 +60,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
             if (filter.startDate() != null && !filter.startDate().isEmpty()
                     && filter.endDate() != null && !filter.endDate().isEmpty()
             ) {
-                predicates.add(cb.greaterThanOrEqualTo(event.get("startDate"), filter.startDate()));
-                predicates.add(cb.lessThanOrEqualTo(event.get("endDate"), filter.endDate()));
+                predicates.add(cb.greaterThanOrEqualTo(event.get("startDate"), LocalDate.parse(filter.startDate(), formatter)));
+                predicates.add(cb.lessThanOrEqualTo(event.get("endDate"), LocalDate.parse(filter.endDate(), formatter)));
             }
 
             cq.distinct(true);

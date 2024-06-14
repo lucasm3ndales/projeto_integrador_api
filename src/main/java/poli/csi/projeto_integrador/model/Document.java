@@ -1,5 +1,6 @@
 package poli.csi.projeto_integrador.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +38,7 @@ public class Document {
     private Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "fk_tramite", nullable = false)
+    @JsonBackReference
     private Procedure procedure;
     @Column(name = "extensao", length = 5, nullable = false)
     @Enumerated(value = EnumType.STRING)

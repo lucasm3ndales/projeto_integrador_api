@@ -37,6 +37,7 @@ public class Procedure {
     @JsonBackReference
     private Event event;
     @OneToMany(mappedBy = "procedure", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Document> documents = new HashSet<>();
 
     @Override

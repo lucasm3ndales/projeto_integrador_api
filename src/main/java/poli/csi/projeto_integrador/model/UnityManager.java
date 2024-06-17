@@ -30,6 +30,8 @@ public class UnityManager {
     private AdmUnity unity;
     @Column(name = "assumiu_em", nullable = false)
     private Timestamp startedOn;
+    @Column(name = "saiu_em")
+    private Timestamp leftOn;
 
     @Override
     public boolean equals(Object o) {

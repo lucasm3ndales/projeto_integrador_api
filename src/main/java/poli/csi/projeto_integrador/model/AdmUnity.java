@@ -27,7 +27,7 @@ public class AdmUnity {
     @JsonBackReference
     private Set<Budget> budgets;
     @OneToMany(mappedBy = "unity")
-    @JsonManagedReference
+    @JsonBackReference
     private Set<UnityManager> unityManagers;
 
     public enum UnityType {

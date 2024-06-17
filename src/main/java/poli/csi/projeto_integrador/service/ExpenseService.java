@@ -113,7 +113,7 @@ public class ExpenseService {
                     .justification(i.justification().trim())
                     .build();
 
-            event.getEventExpense().add(eventExpense);
+            event.getEventExpenses().add(eventExpense);
             expenseRepository.save(expense);
 
         });

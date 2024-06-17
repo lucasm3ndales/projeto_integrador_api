@@ -26,7 +26,7 @@ public class UnityManager {
     private User user;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_unidade")
-    @JsonBackReference
+    @JsonManagedReference
     private AdmUnity unity;
     @Column(name = "assumiu_em", nullable = false)
     private Timestamp startedOn;

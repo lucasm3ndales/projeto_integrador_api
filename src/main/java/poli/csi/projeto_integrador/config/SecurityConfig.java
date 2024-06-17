@@ -62,6 +62,8 @@ public class SecurityConfig {
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
+                HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS,
+                HttpHeaders.CONTENT_DISPOSITION,
                 HttpHeaders.ACCEPT,
                 HttpHeaders.ORIGIN,
                 "timezone"
@@ -73,6 +75,9 @@ public class SecurityConfig {
                 HttpMethod.PUT.name(),
                 HttpMethod.HEAD.name(),
                 HttpMethod.OPTIONS.name()
+        ));
+        config.setExposedHeaders(Arrays.asList(
+                HttpHeaders.CONTENT_DISPOSITION
         ));
         config.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", config);

@@ -79,7 +79,7 @@ public class EventService {
                 .contributionReit(BigDecimal.ZERO)
                 .status(Event.EventStatus.PENDENTE)
                 .archived(false)
-                .eventExpense(new HashSet<>())
+                .eventExpenses(new HashSet<>())
                 .build();
 
         eventRepository.save(event);

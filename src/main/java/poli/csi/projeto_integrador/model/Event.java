@@ -61,7 +61,7 @@ public class Event {
     private Set<Procedure> procedures = new HashSet<>();
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Set<EventExpense> eventExpense = new HashSet<>();
+    private Set<EventExpense> eventExpenses = new HashSet<>();
 
     public enum EventType {OUTROS, TECNOLOGIA, SIMPOSIO, CONGRESSO, EXPOFEIRA, FEIRA_LIVRE}
 

@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import poli.csi.projeto_integrador.dto.request.DocumentDto;
+import poli.csi.projeto_integrador.dto.request.ProcedureDto;
 import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.Event;
 import poli.csi.projeto_integrador.model.Procedure;
@@ -30,10 +31,10 @@ public class ProcedureService {
     private final DocumentService documentService;
 
     @Transactional
-    public boolean process(Long idOrigin, Long idDestiny, Long idEvent, String timezone) {
-        User origin = userRepository.findById(idOrigin).orElseThrow(() -> new EntityNotFoundException("Usuário origem não encontrado!"));
-        User destiny = userRepository.findById(idDestiny).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
-        Event event = eventRepository.findById(idEvent).orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+    public boolean process(ProcedureDto dto, String timezone) {
+        User origin = userRepository.findById(dto.originId()).orElseThrow(() -> new EntityNotFoundException("Usuário origem não encontrado!"));
+        User destiny = userRepository.findById(dto.destinyId()).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
+        Event event = eventRepository.findById(dto.eventId()).orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
 
         Procedure procedure = Procedure.builder()
                 .origin(origin)

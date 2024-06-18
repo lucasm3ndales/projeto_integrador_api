@@ -30,7 +30,7 @@ public class EventController {
         return ResponseEntity.internalServerError().body("Erro ao cadastrar evento!");
     }
 
-    @PutMapping("/update/status/{id}")
+    @PutMapping("/update/status")
     public ResponseEntity<String> updateEventStatus(
             @RequestBody EventStatusDto dto,
             @RequestHeader("timezone") String timezone

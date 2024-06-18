@@ -26,6 +26,7 @@ public class Budget {
     @Column(name = "ano", length = 4, nullable = false)
     private String year;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_unidade")
     @JsonManagedReference
     private AdmUnity unity;
 }

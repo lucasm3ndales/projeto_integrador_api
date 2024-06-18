@@ -109,9 +109,9 @@ public class EventService {
 
     @Transactional
     public boolean updateEventStatus(EventStatusDto dto, String timezone) {
-        Event event = eventRepository.findById(dto.idEvent())
+        Event event = eventRepository.findById(dto.eventId())
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
-        User user = userRepository.findById(dto.idUser())
+        User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
 
         Procedure procedure = getLastProcedure(event);
@@ -171,10 +171,10 @@ public class EventService {
     @Transactional
     public boolean contributeToEvent(ContributionDto dto) {
 
-        User user = userRepository.findById(dto.idUser())
+        User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
 
-        Event event = eventRepository.findById(dto.idEvent())
+        Event event = eventRepository.findById(dto.eventId())
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
 
         Procedure procedure = getLastProcedure(event);

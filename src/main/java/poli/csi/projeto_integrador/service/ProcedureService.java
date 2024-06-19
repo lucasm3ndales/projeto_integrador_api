@@ -33,8 +33,14 @@ public class ProcedureService {
     @Transactional
     public boolean process(ProcedureDto dto, String timezone) {
         User origin = userRepository.findById(dto.originId()).orElseThrow(() -> new EntityNotFoundException("Usuário origem não encontrado!"));
-        User destiny = userRepository.findById(dto.destinyId()).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
+        User destiny = userRepository.findByUnityId(dto.destinyId()).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
         Event event = eventRepository.findById(dto.eventId()).orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
+
+        Procedure lastProcedure = getLastProcedure(event);
+
+        if(!lastProcedure.getDestiny().getId().equals(origin.getId())) {
+            throw new CustomException("Usuário não autorizado a realizar modificações!");
+        }
 
         Procedure procedure = Procedure.builder()
                 .origin(origin)
@@ -48,9 +54,8 @@ public class ProcedureService {
     }
 
     @Transactional
-    public boolean process(Long o, Long d, List<DocumentDto> documents, Event event, String timezone) {
+    public boolean process(Long o, User destiny, List<DocumentDto> documents, Event event, String timezone) {
         User origin = userRepository.findById(o).orElseThrow(() -> new EntityNotFoundException("Usuário origem não encontrado!"));
-        User destiny = userRepository.findById(d).orElseThrow(() -> new EntityNotFoundException("Usuário destino não encontrado!"));
 
         Procedure procedure = Procedure.builder()
                 .origin(origin)
@@ -100,6 +105,12 @@ public class ProcedureService {
     private Procedure getFirstProcedure(Event event) {
         return event.getProcedures().stream()
                 .min(Comparator.comparing(Procedure::getCreatedAt))
+                .orElseThrow(() -> new EntityNotFoundException("Não há trâmites ligados ao evento!"));
+    }
+
+    private Procedure getLastProcedure(Event event) {
+        return event.getProcedures().stream()
+                .max(Comparator.comparing(Procedure::getCreatedAt))
                 .orElseThrow(() -> new EntityNotFoundException("Não há trâmites ligados ao evento!"));
     }
 

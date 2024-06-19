@@ -18,19 +18,21 @@ import java.util.Comparator;
 public class BudgetService {
     private final BudgetRepository budgetRepository;
 
-    public boolean decrementBudget(User destiny, Event event) {
-        Procedure procedure = getLastProcedure(event);
+    public boolean decrementBudget(User destiny, Event event, Procedure procedure) {
 
         String year = String.valueOf(LocalDate.now().getYear());
 
         Budget budgetDestiny = budgetRepository.findLastBudget(destiny.getId(), year)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento!"));
+                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento! 1"));
+
+        System.out.println(budgetDestiny);
 
         User origin = procedure.getOrigin();
 
         Budget budgetOrigin = budgetRepository.findLastBudget(origin.getId(), year)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento!"));
+                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento! 2"));
 
+        System.out.println(budgetOrigin);
 
         if(destiny.getRole() == User.UserType.CHEFE_DEPARTAMENTO) {
             BigDecimal balanceDestiny = budgetDestiny.getBalance().subtract(event.getContributionDep());

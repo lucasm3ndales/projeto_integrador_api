@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import poli.csi.projeto_integrador.dto.filter.FilterUser;
@@ -18,6 +19,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     Optional<User> findUserByUsername(@Param("username") String username);
     Optional<User> findUserByEmailOrUsername(@Param("email") String email, @Param("username") String username);
+    @Query("SELECT u FROM User u JOIN u.unityManagers um JOIN um.unity un WHERE un.id = :id")
+    Optional<User> findByUnityId(@Param("id") Long id);
+
 
     static Specification<User> specUser(FilterUser filter) {
         return (user, cq, cb) -> {

@@ -84,6 +84,8 @@ public class EventService {
 
         eventRepository.save(event);
 
+        User destiny = userRepository.findByUnityId(dto.destiny()).orElseThrow(() -> new EntityNotFoundException("Usuário de destino não encontrado!"));
+
 
         boolean resExpense = expenseService.addExpensesToEvent(event, dto.eventExpenses(), timezone);
 
@@ -91,7 +93,7 @@ public class EventService {
             return false;
         }
 
-        boolean resProcedure = procedureService.process(dto.origin(), dto.destiny(), dto.documents(), event, timezone);
+        boolean resProcedure = procedureService.process(dto.origin(), destiny, dto.documents(), event, timezone);
 
         if (!resProcedure) {
             return false;
@@ -133,7 +135,7 @@ public class EventService {
 
             if (status == Event.EventStatus.ACEITO) {
                 if (validateCosts(event)) {
-                    boolean res = budgetService.decrementBudget(user, event);
+                    boolean res = budgetService.decrementBudget(user, event, procedure);
 
                     if (!res) {
                         throw new CustomException("Erro ao registrar orçamento!");

@@ -109,6 +109,7 @@ public class EventService {
         return start.isAfter(end);
     }
 
+    //TODO: FIX EXPENSE BUG
     @Transactional
     public boolean updateEventStatus(EventStatusDto dto, String timezone) {
         Event event = eventRepository.findById(dto.eventId())

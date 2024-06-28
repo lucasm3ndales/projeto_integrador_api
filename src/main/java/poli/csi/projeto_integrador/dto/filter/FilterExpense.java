@@ -4,7 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record FilterExpense(
-        String name,
-        String type
+        String search
 ) {
 }

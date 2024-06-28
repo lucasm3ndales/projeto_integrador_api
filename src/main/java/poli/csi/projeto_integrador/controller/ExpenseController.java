@@ -20,7 +20,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveExpense(SaveExpenseDto dto) {
+    public ResponseEntity<String> saveExpense(@RequestBody SaveExpenseDto dto) {
         boolean res = expenseService.save(dto);
         if(res) {
             return ResponseEntity.ok("Despesa cadastrada com sucesso!");
@@ -29,7 +29,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateExpense(UpdateExpenseDto dto) {
+    public ResponseEntity<String> updateExpense(@RequestBody UpdateExpenseDto dto) {
         boolean res = expenseService.update(dto);
         if(res) {
             return ResponseEntity.ok("Dados da despesa alterados com sucesso!");
@@ -49,12 +49,10 @@ public class ExpenseController {
     @GetMapping("/expenses")
     public ResponseEntity<Page<Expense>> getExpenses(
             @PageableDefault(page = 0, size = 200) Pageable pageable,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "type", required = false) String type
+            @RequestParam(value = "search", required = false) String search
     ) {
         FilterExpense filter = FilterExpense.builder()
-                .name(name)
-                .type(type)
+                .search(search)
                 .build();
         Page<Expense> res = expenseService.getExpenses(pageable, filter);
         if(res != null) {

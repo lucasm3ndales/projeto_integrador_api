@@ -32,6 +32,7 @@ public class ExpenseService {
 
     @Transactional
     public boolean save(SaveExpenseDto dto) {
+
         Expense isExist = expenseRepository.findExpenseByNameEqualsIgnoreCase(dto.name().trim())
                 .orElse(null);
 
@@ -95,8 +96,7 @@ public class ExpenseService {
     }
 
     private boolean isFilter(FilterExpense f) {
-        return f.name() == null || f.name().trim().isEmpty() ||
-                f.type() == null || f.type().trim().isEmpty();
+        return f.search() != null || !f.search().isEmpty();
     }
 
 

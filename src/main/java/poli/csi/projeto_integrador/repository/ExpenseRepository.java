@@ -21,12 +21,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
         return (expense, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.name() != null && !filter.name().isEmpty()) {
-                predicates.add(cb.like(expense.get("name"), filter.name() + "%"));
-            }
-
-            if (filter.type() != null && !filter.type().isEmpty()) {
-                predicates.add(cb.equal(cb.upper(expense.get("type")), filter.type().toUpperCase()));
+            if (filter.search() != null && !filter.search().isEmpty()) {
+                predicates.add(cb.or(cb.like(cb.lower(expense.get("name")), filter.search().toLowerCase() + "%"),
+                        cb.like(cb.upper(expense.get("type")), filter.search().toUpperCase() + "%")));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

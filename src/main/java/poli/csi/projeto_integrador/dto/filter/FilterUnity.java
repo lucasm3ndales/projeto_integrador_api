@@ -4,8 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record FilterUnity(
-        String name,
-        String type,
-        String manager
+        String search,
+        String type
 ) {
 }

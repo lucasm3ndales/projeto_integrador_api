@@ -86,7 +86,7 @@ public class AdmUnityService {
     }
 
     private boolean isFilter(FilterUnity f) {
-        return f.name() != null && !f.name().trim().isEmpty() || f.type() != null && !f.type().trim().isEmpty();
+        return f.search() != null && !f.search().trim().isEmpty() || f.type() != null && !f.type().trim().isEmpty();
     }
 
 

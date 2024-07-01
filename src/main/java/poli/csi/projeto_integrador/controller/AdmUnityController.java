@@ -49,15 +49,13 @@ public class AdmUnityController {
     @GetMapping("/unities")
     public ResponseEntity<Page<AdmUnity>> getUnities(
             @PageableDefault(page = 0, size = 200) Pageable pageable,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "type") String type,
-            @RequestParam(value = "manager", required = false) String manager
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "type") String type
 
     ) {
         FilterUnity filter = FilterUnity.builder()
-                .name(name)
+                .search(search)
                 .type(type)
-                .manager(manager)
                 .build();
 
         Page<AdmUnity> unities = admUnityService.getUnities(filter, pageable);

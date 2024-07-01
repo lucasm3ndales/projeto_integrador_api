@@ -1,7 +1,10 @@
 package poli.csi.projeto_integrador.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import poli.csi.projeto_integrador.dto.request.ManagersByUnitiesDto;
+import poli.csi.projeto_integrador.dto.response.UnityManagerDepDto;
 import poli.csi.projeto_integrador.model.AdmUnity;
 import poli.csi.projeto_integrador.model.UnityManager;
 import poli.csi.projeto_integrador.model.User;
@@ -12,6 +15,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +32,29 @@ public class UnityManagerService {
 
         unityManagerRepository.save(manager);
         return true;
+    }
+
+    public Set<UnityManagerDepDto> getUnityManagersByUnitiesIds(ManagersByUnitiesDto dto) {
+       var res = unityManagerRepository.findUnityManagerByUnity(dto.unityIds());
+
+       if(res.isEmpty()) {
+           throw new EntityNotFoundException("Responável do departamento não encontrado!");
+       }
+
+       Set<UnityManagerDepDto> managers = new HashSet<>();
+
+       res.forEach(i -> {
+           UnityManagerDepDto item = UnityManagerDepDto
+                   .builder()
+                   .id(i.getId())
+                   .unityId(i.getUnity().getId())
+                   .userId(i.getUser().getId())
+                   .manager(i.getUser().getName())
+                   .build();
+           managers.add(item);
+       });
+
+       return managers;
     }
 
     private Timestamp generateTimestamp(String timezone) {

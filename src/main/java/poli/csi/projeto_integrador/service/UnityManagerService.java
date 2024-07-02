@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import poli.csi.projeto_integrador.dto.request.ManagersByUnitiesDto;
 import poli.csi.projeto_integrador.dto.response.UnityManagerDepDto;
+import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.AdmUnity;
 import poli.csi.projeto_integrador.model.UnityManager;
 import poli.csi.projeto_integrador.model.User;
@@ -24,6 +25,15 @@ public class UnityManagerService {
     private final UnityManagerRepository unityManagerRepository;
 
     public boolean saveUniteManager(User user, AdmUnity unity, String timezone) {
+
+        var unityManagers = unityManagerRepository.findAll();
+
+        for (var u : unityManagers) {
+            if(u.getUser().equals(user)) {
+                throw new CustomException("Este servidor já administra uma unidade!");
+            }
+        }
+
         UnityManager manager = UnityManager.builder()
                 .unity(unity)
                 .user(user)

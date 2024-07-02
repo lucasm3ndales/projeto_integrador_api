@@ -33,13 +33,13 @@ public class AdmUnityService {
             throw new IllegalArgumentException("Tipo de unidade administrativa inválido!");
         }
 
-        User user = userRepository.findById(dto.idUser())
-                .orElseThrow(() -> new EntityNotFoundException("Servidor responsável pela unidade não encontrado!"));
-
         AdmUnity unity = AdmUnity.builder()
                 .name(dto.name().toLowerCase().trim())
                 .type(type)
                 .build();
+
+        User user = userRepository.findById(dto.idUser())
+                .orElseThrow(() -> new EntityNotFoundException("Servidor responsável pela unidade não encontrado!"));
 
         boolean res = unityManagerService.saveUniteManager(user, unity, timezone);
 

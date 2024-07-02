@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getUsers(
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @PageableDefault(page = 0, size = 200) Pageable pageable,
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "role", required = false) String role,
             @RequestParam(value = "active", required = false) Boolean active

@@ -61,7 +61,7 @@ public class ExpenseService {
         Expense isExist = expenseRepository.findExpenseByNameEqualsIgnoreCase(dto.name().trim())
                 .orElse(null);
 
-        if (isExist != null) {
+        if (isExist != null && !isExist.getName().equals(dto.name().trim())) {
             throw new CustomException("Despesa já cadastrada no sistema!");
         }
 

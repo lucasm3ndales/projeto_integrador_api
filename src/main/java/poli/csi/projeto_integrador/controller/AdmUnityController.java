@@ -59,11 +59,6 @@ public class AdmUnityController {
                 .build();
 
         Page<AdmUnity> unities = admUnityService.getUnities(filter, pageable);
-
-        if(unities.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(unities);
     }
 

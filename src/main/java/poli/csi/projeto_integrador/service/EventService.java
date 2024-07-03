@@ -229,6 +229,7 @@ public class EventService {
     private boolean isFilter(FilterEvent e) {
         return e.name() != null && !e.name().isBlank()
                 || e.periodicity() != null && !e.periodicity().isBlank()
+                || e.type() != null && !e.type().isBlank()
                 || e.status() != null && !e.status().isBlank()
                 || e.startDate() != null && !e.startDate().isBlank()
                 || e.endDate() != null && !e.endDate().isBlank();

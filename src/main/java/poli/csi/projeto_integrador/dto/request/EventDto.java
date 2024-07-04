@@ -33,7 +33,6 @@ public record EventDto(
         String goal,
         @NotNull(message = "Número de participantes inválidos!")
         Integer participants,
-        @Positive(message = "Custo do evento inválido!")
         BigDecimal cost,
         @Valid
         AddressDto address,

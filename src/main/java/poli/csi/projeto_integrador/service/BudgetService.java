@@ -10,7 +10,6 @@ import poli.csi.projeto_integrador.model.User;
 import poli.csi.projeto_integrador.repository.BudgetRepository;
 import java.math.BigDecimal;
 import java.time.*;
-import java.util.Comparator;
 
 
 @Service
@@ -18,53 +17,58 @@ import java.util.Comparator;
 public class BudgetService {
     private final BudgetRepository budgetRepository;
 
-    public boolean decrementBudget(User destiny, Event event, Procedure procedure) {
+    public boolean decrementBudget(User user1, Event event, Procedure procedure) {
 
         String year = String.valueOf(LocalDate.now().getYear());
 
-        Budget budgetDestiny = budgetRepository.findLastBudget(destiny.getId(), year)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento! 1"));
+        Budget budgetUser1 = budgetRepository.findLastBudget(user1.getId(), year)
+                .orElseThrow(() -> new EntityNotFoundException("Unidade remetente sem orçamento!"));
 
-        System.out.println(budgetDestiny);
+        User user2 = procedure.getOrigin();
 
-        User origin = procedure.getOrigin();
 
-        Budget budgetOrigin = budgetRepository.findLastBudget(origin.getId(), year)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade sem orçamento! 2"));
+        if(user2.getRole() == User.UserType.PRO_REITOR || user2.getRole() == User.UserType.CHEFE_DEPARTAMENTO) {
+            Budget budgetUser2 = budgetRepository.findLastBudget(user2.getId(), year)
+                    .orElseThrow(() -> new EntityNotFoundException("Unidade destinatária sem orçamento!"));
 
-        System.out.println(budgetOrigin);
+            if(user1.getRole() == User.UserType.CHEFE_DEPARTAMENTO) {
 
-        if(destiny.getRole() == User.UserType.CHEFE_DEPARTAMENTO) {
-            BigDecimal balanceDestiny = budgetDestiny.getBalance().subtract(event.getContributionDep());
-            BigDecimal balanceOrigin = budgetOrigin.getBalance().subtract(event.getContributionReit());
+                BigDecimal newBudgetUser1 = budgetUser1.getBudget().subtract(event.getContributionDep());
+                BigDecimal newBudgetUser2 = budgetUser2.getBudget().subtract(event.getContributionReit());
 
-            budgetDestiny.setBudget(balanceDestiny);
-            budgetOrigin.setBudget(balanceOrigin);
+                budgetUser1.setBudget(newBudgetUser1);
+                budgetUser2.setBudget(newBudgetUser2);
 
-            budgetDestiny.setBudget(event.getContributionDep());
-            budgetOrigin.setBudget(event.getContributionReit());
+                BigDecimal newBalanaceUser1 = budgetUser1.getBalance().add(event.getContributionDep());
+                BigDecimal newBalanaceUser2 = budgetUser2.getBalance().add(event.getContributionReit());
 
+                budgetUser1.setBalance(newBalanaceUser1);
+                budgetUser2.setBalance(newBalanaceUser2);
+
+            } else {
+                BigDecimal newBudgetUser1 = budgetUser1.getBudget().subtract(event.getContributionReit());
+                BigDecimal newBudgetUser2 = budgetUser2.getBudget().subtract(event.getContributionDep());
+
+                budgetUser1.setBudget(newBudgetUser1);
+                budgetUser2.setBudget(newBudgetUser2);
+
+                BigDecimal newBalanaceUser1 = budgetUser1.getBalance().add(event.getContributionReit());
+                BigDecimal newBalanaceUser2 = budgetUser2.getBalance().add(event.getContributionDep());
+
+                budgetUser1.setBalance(newBalanaceUser1);
+                budgetUser2.setBalance(newBalanaceUser2);
+            }
+            budgetRepository.save(budgetUser2);
         } else {
-            BigDecimal balanceDestiny = budgetDestiny.getBalance().subtract(event.getContributionReit());
-            BigDecimal balanceOrigin = budgetOrigin.getBalance().subtract(event.getContributionDep());
-
-            budgetDestiny.setBudget(balanceDestiny);
-            budgetOrigin.setBudget(balanceOrigin);
-
-            budgetDestiny.setBudget(event.getContributionReit());
-            budgetOrigin.setBudget(event.getContributionDep());
+            BigDecimal newBudgetUser1 = budgetUser1.getBudget().subtract(event.getContributionDep());
+            budgetUser1.setBudget(newBudgetUser1);
+            BigDecimal newBalanaceUser1 = budgetUser1.getBalance().add(event.getContributionDep());
+            budgetUser1.setBalance(newBalanaceUser1);
         }
 
-        budgetRepository.save(budgetDestiny);
-        budgetRepository.save(budgetOrigin);
+        budgetRepository.save(budgetUser1);
 
        return true;
-    }
-
-    private Procedure getLastProcedure(Event event) {
-        return event.getProcedures().stream()
-                .max(Comparator.comparing(Procedure::getCreatedAt))
-                .orElseThrow(() -> new EntityNotFoundException("Não há trâmites ligados ao evento!"));
     }
 
 }

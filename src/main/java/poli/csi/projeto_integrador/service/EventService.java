@@ -109,17 +109,16 @@ public class EventService {
         return start.isAfter(end);
     }
 
-    //TODO: FIX EXPENSE BUG
     @Transactional
     public boolean updateEventStatus(EventStatusDto dto, String timezone) {
         Event event = eventRepository.findById(dto.eventId())
                 .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado!"));
-        User user = userRepository.findById(dto.userId())
+        User origin = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
 
         Procedure procedure = getLastProcedure(event);
 
-        if(!procedure.getDestiny().equals(user)) {
+        if(!procedure.getDestiny().equals(origin)) {
             throw new CustomException("Usuário não autorizado a realizar modificações!");
         }
 
@@ -131,12 +130,12 @@ public class EventService {
             throw new IllegalArgumentException("Status do evento inválido!");
         }
 
-        if (event.getStatus() == Event.EventStatus.PENDENTE && status != Event.EventStatus.PENDENTE && user.getRole() != User.UserType.SERVIDOR) {
+        if (event.getStatus() == Event.EventStatus.PENDENTE && status != Event.EventStatus.PENDENTE && origin.getRole() != User.UserType.SERVIDOR) {
 
 
             if (status == Event.EventStatus.ACEITO) {
                 if (validateCosts(event)) {
-                    boolean res = budgetService.decrementBudget(user, event, procedure);
+                    boolean res = budgetService.decrementBudget(origin, event, procedure);
 
                     if (!res) {
                         throw new CustomException("Erro ao registrar orçamento!");
@@ -150,7 +149,7 @@ public class EventService {
                 event.setStatus(Event.EventStatus.RECUSADO);
             }
 
-            boolean resProcedure = procedureService.process(user, event, timezone);
+            boolean resProcedure = procedureService.process(origin, event, timezone);
 
             if (!resProcedure) {
                 throw new CustomException("Erro ao encerrar trâmite!");
@@ -188,10 +187,10 @@ public class EventService {
 
         if (event.getStatus() == Event.EventStatus.PENDENTE && user.getRole() != User.UserType.SERVIDOR) {
 
-            BigDecimal value = event.getContributionDep().add(event.getContributionReit()).add(dto.contribution());
+            BigDecimal value = dto.contribution().add(event.getContributionReit());
 
             if (value.compareTo(event.getCost()) == 1) {
-                throw new CustomException("O valor total de aporte não pode ser maior que o custo do evento!");
+                throw new CustomException("O valor do aporte não pode ser maior que o custo do evento!");
             }
 
             if (user.getRole() == User.UserType.CHEFE_DEPARTAMENTO) {

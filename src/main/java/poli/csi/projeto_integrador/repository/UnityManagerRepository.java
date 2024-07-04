@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import poli.csi.projeto_integrador.model.UnityManager;
-
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 

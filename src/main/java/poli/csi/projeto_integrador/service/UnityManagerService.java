@@ -2,6 +2,7 @@ package poli.csi.projeto_integrador.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.Manager;
 import org.springframework.stereotype.Service;
 import poli.csi.projeto_integrador.dto.request.ManagersByUnitiesDto;
 import poli.csi.projeto_integrador.dto.response.UnityManagerDepDto;
@@ -17,14 +18,16 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UnityManagerService {
     private final UnityManagerRepository unityManagerRepository;
 
-    public boolean saveUniteManager(User user, AdmUnity unity, String timezone) {
+    public boolean saveUnityManager(User user, AdmUnity unity, String timezone) {
 
         var unityManagers = unityManagerRepository.findAll();
 

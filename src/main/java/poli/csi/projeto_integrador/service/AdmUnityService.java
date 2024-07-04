@@ -12,6 +12,7 @@ import poli.csi.projeto_integrador.dto.request.SaveUnityDto;
 import poli.csi.projeto_integrador.dto.request.UpdateUnityDto;
 import poli.csi.projeto_integrador.exception.CustomException;
 import poli.csi.projeto_integrador.model.AdmUnity;
+import poli.csi.projeto_integrador.model.UnityManager;
 import poli.csi.projeto_integrador.model.User;
 import poli.csi.projeto_integrador.repository.AdmUnityRepository;
 import poli.csi.projeto_integrador.repository.UserRepository;
@@ -41,7 +42,7 @@ public class AdmUnityService {
         User user = userRepository.findById(dto.idUser())
                 .orElseThrow(() -> new EntityNotFoundException("Servidor responsável pela unidade não encontrado!"));
 
-        boolean res = unityManagerService.saveUniteManager(user, unity, timezone);
+        boolean res = unityManagerService.saveUnityManager(user, unity, timezone);
 
         if(!res) {
             throw new CustomException("Erro ao registrar servidor responsável pela unidade!");
@@ -61,10 +62,20 @@ public class AdmUnityService {
 
         unity.setName(dto.name().toLowerCase().trim());
 
-        boolean res = unityManagerService.saveUniteManager(user, unity, timezone);
+        var userManager = unity.getUnityManagers()
+                .stream()
+                .filter(i -> i.getLeftOn() == null)
+                .map(UnityManager::getUser)
+                .toList();
 
-        if(!res) {
-            throw new CustomException("Erro ao registrar servidor responsável pela unidade!");
+        for(var i : userManager) {
+            if(!i.getId().equals(dto.idUser())) {
+                boolean res = unityManagerService.saveUnityManager(user, unity, timezone);
+
+                if(!res) {
+                    throw new CustomException("Erro ao registrar servidor responsável pela unidade!");
+                }
+            }
         }
 
         admUnityRepository.save(unity);
